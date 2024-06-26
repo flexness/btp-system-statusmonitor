@@ -1,0 +1,23 @@
+---
+applications:
+  - name: python-app
+    memory: 128M
+    buildpacks:
+      - python_buildpack
+    command: python run.py
+    # prod vars
+    env:
+      PORT: 3000
+      HANA_HOST: your-hana-host
+      HANA_PORT: 30015
+      HANA_USER: your-hana-user
+      HANA_PASSWORD: your-hana-password
+      HANA_CERTIFICATE: path-to-your-certificate
+      XSUAA_CLIENTID: your-xsuaa-clientid
+      XSUAA_CLIENTSECRET: your-xsuaa-clientsecret
+      XSUAA_URL: your-xsuaa-url
+    services:
+      - name: my-xsuaa
+        type: xsuaa
+      - name: my-hana
+        type: hana

@@ -1,0 +1,19 @@
+<!-- templates/layout.html -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="main-container m-8">
+
+    <div class="h-24">
+        {% block navbar %}
+            {% include "navbar.html" %}
+        {% endblock %}
+    </div>
+    <div>
+        {% block main %}
+        {% endblock %}
+    </div>
+    
+</div>
+{% endblock %}
+    

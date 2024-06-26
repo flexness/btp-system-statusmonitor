@@ -1,0 +1,32 @@
+{
+  "SAP_Services": {
+    "FICO": {
+      "ServiceID": "FICO",
+      "Description": "Financial Accounting and Controlling",
+      "Status": "Running",
+      "Version": "SAP ERP 6.0 EHP8",
+      "DependentSystems": ["DEV", "QAS", "PRD"]
+    },
+    "MM": {
+      "ServiceID": "MM",
+      "Description": "Materials Management",
+      "Status": "Running",
+      "Version": "SAP ERP 6.0 EHP8",
+      "DependentSystems": ["DEV", "QAS", "PRD"]
+    },
+    "SD": {
+      "ServiceID": "SD",
+      "Description": "Sales and Distribution",
+      "Status": "Running",
+      "Version": "SAP ERP 6.0 EHP8",
+      "DependentSystems": ["DEV", "QAS", "PRD"]
+    },
+    "HCM": {
+      "ServiceID": "HCM",
+      "Description": "Human Capital Management",
+      "Status": "Stopped",
+      "Version": "SAP ERP 6.0 EHP8",
+      "DependentSystems": ["DEV", "QAS"]
+    }
+  }
+}

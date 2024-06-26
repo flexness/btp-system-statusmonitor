@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<div>
+
+
+    
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Service-Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Tags
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Beschreibung
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Verantwortung
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Report
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+        {% for my_item in sap_landscape %}
+
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td class="px-6 py-4 font">
+                <div class="ps-3">
+                    <div class="text-base font-semibold">Service One Service</div>
+                </div>  
+            </td>            
+            <td class="px-6 py-4">
+                <div class="flex items-center">
+                    <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                        <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                        Available
+                    </span>                
+                </div>
+            </td>
+            <td class="px-6 py-4">
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Tag 1</span>
+                <span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Tag 2</span>
+                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">Tag 3</span>
+                <span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">Tag 4</span>
+            </td>
+            <td class="px-6 py-4 text-xs">
+                lorem ipsum dolor sit amet 
+                lorem ipsum dolor sit amet 
+                lorem ipsum dolor sit amet 
+                lorem ipsum dolor sit amet 
+            </td>
+            <td class="px-6 py-4 text-xs">
+                <ul>
+                    <li>
+                        Name, Stelle
+                    </li>
+                    <li>
+                        Mail
+                    </li>
+                    <li>
+                        Phone
+                    </li>
+                </ul>
+            </td>
+            <td class="px-6 py-4 text-xs">
+                {% from "macros.html" import button %}
+                {{ button('Report') }}
+            </td>
+
+        </tr>        
+        {% endfor %}
+
+
+        </tbody>   
+    </table>
+
+
+    <h1 class="text-3xl font-bold mb-6">SAP System Landscape Status</h1>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for system_name, system in sap_landscape.SAP_Landscape.items() %}
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-2">{{ system_name }}</h2>
+        <p><strong>System ID:</strong> {{ system.SystemID }}</p>
+        <p><strong>Description:</strong> {{ system.Description }}</p>
+        <p><strong>Status:</strong> <span class="{{ 'text-green-500' if system.Status == 'Running' else 'text-red-500' }}">{{ system.Status }}</span></p>
+        <p><strong>Version:</strong> {{ system.Version }}</p>
+        <div class="mt-4">
+            <h3 class="text-lg font-semibold">Database</h3>
+            <p><strong>Type:</strong> {{ system.Database.Type }}</p>
+            <p><strong>Version:</strong> {{ system.Database.Version }}</p>
+            <p><strong>Status:</strong> <span class="{{ 'text-green-500' if system.Database.Status == 'Running' else 'text-red-500' }}">{{ system.Database.Status }}</span></p>
+        </div>
+        <div class="mt-4">
+            <h3 class="text-lg font-semibold">Application Servers</h3>
+            <ul>
+                {% for server in system.ApplicationServers %}
+                <li class="mt-2">
+                    <p><strong>Server ID:</strong> {{ server.ServerID }}</p>
+                    <p><strong>Status:</strong> <span class="{{ 'text-green-500' if server.Status == 'Running' else 'text-red-500' }}">{{ server.Status }}</span></p>
+                    <p><strong>CPU Usage:</strong> {{ server.CPU_Usage }}</p>
+                    <p><strong>Memory Usage:</strong> {{ server.Memory_Usage }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+    <h2 class="text-2xl font-bold mb-4 mt-6">SAP Modules/Software/APIs/Services</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for service_name, service in sap_services.SAP_Services.items() %}
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-semibold mb-2">{{ service_name }}</h3>
+            <p><strong>Service ID:</strong> {{ service.ServiceID }}</p>
+            <p><strong>Description:</strong> {{ service.Description }}</p>
+            <p><strong>Status:</strong> <span class="{{ 'text-green-500' if service.Status == 'Running' else 'text-red-500' }}">{{ service.Status }}</span></p>
+            <p><strong>Version:</strong> {{ service.Version }}</p>
+            <p><strong>Dependent Systems:</strong> {{ service.DependentSystems | join(', ') }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <h2 class="text-2xl font-bold mb-4 mt-6">External/3rd-Party Services</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for service_name, service in external_services.External_Services.items() %}
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h3 class="text-xl font-semibold mb-2">{{ service_name }}</h3>
+        <p><strong>Service ID:</strong> {{ service.ServiceID }}</p>
+        <p><strong>Description:</strong> {{ service.Description }}</p>
+        <p><strong>Status:</strong> <span class="{{ 'text-green-500' if service.Status == 'Running' else 'text-red-500' }}">{{ service.Status }}</span></p>
+        <p><strong>Version:</strong> {{ service.Version }}</p>
+        <p><strong>API Endpoint:</strong> <a href="{{ service.API_Endpoint }}" class="text-blue-500">{{ service.API_Endpoint }}</a></p>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+{% endblock %} 

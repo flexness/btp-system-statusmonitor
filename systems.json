@@ -1,0 +1,111 @@
+{
+    "SAP_Landscape": {
+      "Development": {
+        "SystemID": "DEV",
+        "Description": "Development System",
+        "Status": "Running",
+        "Version": "SAP ERP 6.0 EHP8",
+        "Database": {
+          "Type": "HANA",
+          "Version": "2.0 SPS05",
+          "Status": "Running"
+        },
+        "ApplicationServers": [
+          {
+            "ServerID": "DEV_AS1",
+            "Status": "Running",
+            "CPU_Usage": "45%",
+            "Memory_Usage": "70%"
+          },
+          {
+            "ServerID": "DEV_AS2",
+            "Status": "Stopped",
+            "CPU_Usage": "N/A",
+            "Memory_Usage": "N/A"
+          }
+        ]
+      },      
+      "Sandbox": {
+        "SystemID": "DEV",
+        "Description": "Development System",
+        "Status": "Running",
+        "Version": "SAP ERP 6.0 EHP8",
+        "Database": {
+          "Type": "HANA",
+          "Version": "2.0 SPS05",
+          "Status": "Running"
+        },
+        "ApplicationServers": [
+          {
+            "ServerID": "DEV_AS1",
+            "Status": "Running",
+            "CPU_Usage": "45%",
+            "Memory_Usage": "70%"
+          },
+          {
+            "ServerID": "DEV_AS2",
+            "Status": "Stopped",
+            "CPU_Usage": "N/A",
+            "Memory_Usage": "N/A"
+          }
+        ]
+      },
+      "QualityAssurance": {
+        "SystemID": "QAS",
+        "Description": "Quality Assurance System",
+        "Status": "Running",
+        "Version": "SAP ERP 6.0 EHP8",
+        "Database": {
+          "Type": "HANA",
+          "Version": "2.0 SPS05",
+          "Status": "Running"
+        },
+        "ApplicationServers": [
+          {
+            "ServerID": "QAS_AS1",
+            "Status": "Running",
+            "CPU_Usage": "55%",
+            "Memory_Usage": "65%"
+          },
+          {
+            "ServerID": "QAS_AS2",
+            "Status": "Running",
+            "CPU_Usage": "60%",
+            "Memory_Usage": "68%"
+          }
+        ]
+      },
+      "Production": {
+        "SystemID": "PRD",
+        "Description": "Production System",
+        "Status": "Running",
+        "Version": "SAP ERP 6.0 EHP8",
+        "Database": {
+          "Type": "HANA",
+          "Version": "2.0 SPS05",
+          "Status": "Running"
+        },
+        "ApplicationServers": [
+          {
+            "ServerID": "PRD_AS1",
+            "Status": "Running",
+            "CPU_Usage": "75%",
+            "Memory_Usage": "80%"
+          },
+          {
+            "ServerID": "PRD_AS2",
+            "Status": "Running",
+            "CPU_Usage": "70%",
+            "Memory_Usage": "78%"
+          },
+          {
+            "ServerID": "PRD_AS3",
+            "Status": "Running",
+            "CPU_Usage": "72%",
+            "Memory_Usage": "79%"
+          }
+        ]
+      }
+    }
+  }
+  

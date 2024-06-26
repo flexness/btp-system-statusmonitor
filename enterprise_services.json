@@ -1,0 +1,32 @@
+{
+  "Enterprise_Services": {
+    "Outlook": {
+      "ServiceID": "Outlook",
+      "Description": "Email and Calendar Service",
+      "Status": "Running",
+      "Version": "Microsoft 365",
+      "Server": "outlook.office365.com"
+    },
+    "SharePoint": {
+      "ServiceID": "SharePoint",
+      "Description": "Document Management and Storage",
+      "Status": "Running",
+      "Version": "SharePoint Online",
+      "Server": "sharepoint.office365.com"
+    },
+    "Active_Directory": {
+      "ServiceID": "Active_Directory",
+      "Description": "Directory Service",
+      "Status": "Running",
+      "Version": "Windows Server 2019",
+      "Server": "ad.company.com"
+    },
+    "VPN": {
+      "ServiceID": "VPN",
+      "Description": "Virtual Private Network",
+      "Status": "Stopped",
+      "Version": "Cisco AnyConnect",
+      "Server": "vpn.company.com"
+    }
+  }
+}
