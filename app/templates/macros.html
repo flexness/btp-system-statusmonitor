@@ -5,3 +5,155 @@
     <button type="button" class="{{ classes }} text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">{{ text }}</button>
 
 {% endmacro %}
+
+
+{% macro services_table_view(sap_services) %}
+<table id="table" data-toggle="table" data-search="true" data-sortable="true" data-show-columns="true"
+    data-show-fullscreen="true" data-show-refresh="true"
+    
+    
+    data-buttons-class="warning"
+    data-pagination="true"
+    data-url="http://localhost:3000/api/services"
+    data-card-view="false"
+    data-advanced-search="true"
+    data-id-table="advancedTable"
+    data-show-toggle="true"
+    data-filter-control="true"
+    data-show-search-clear-button="true"
+    data-search-align="left"
+    >
+    <thead>
+        <tr>
+            <th data-field="ServiceID" data-sortable="true" data-filter-control="input">Name</th>
+            <th data-field="status" data-sortable="true" data-filter-control="select">Status</th>
+            <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
+            <th data-field="endpoint" data-sortable="true" data-filter-control="input">endpoint</th>
+            <th data-field="Version">Version</th>
+            <th data-field="dependent_systems" data-sortable="true">dependent_systems</th>
+            <th data-field="Tags">Tags</th>
+            <th data-field="Contact" data-sortable="true">Contact</th>
+            <th data-field="Report">Report</th>
+        </tr>
+    </thead>
+    <tbody class="text-sm">
+
+        {% for service in sap_services.services %}
+
+        <tr>
+            <td>{{ service.name }} </td>
+            <td>
+                {% if service.status == "Running" %}
+                    <span class="badge text-bg-success">{{ service.status }}</span>
+
+                {% else %}
+                
+                <span class="badge text-bg-warning">{{ service.status }}</span>
+
+                {% endif %}
+
+            </td>
+            <td>{{ service.description }}</td>
+            <td>{{ service.endpoint }}</td>
+            <td>{{ service.version }}</td>
+            <td>
+              {% for dep in service.dependent_systems %} 
+              <span class="badge text-bg-warning">{{dep}}</span>
+
+              {% endfor %}
+            </td>
+            <td>
+              {% for tag in service.tags %} 
+              <span class="badge text-bg-warning">{{tag}}</span>
+
+              {% endfor %}
+            </td>
+            <td>
+                <span><i class="bi bi-envelope-fill"></i> Mail: some@mail.de</span><br>
+                <span><i class="bi bi-phone"></i> Phone: 1234567890</span>
+  
+              </td>
+            <td><button type="button" class="btn btn-secondary btn-sm">Report</button>
+</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}
+
+
+
+{% macro services_table_admin(sap_services) %}
+<table id="table" data-toggle="table" data-search="true" data-sortable="true" data-show-columns="true"
+    data-show-fullscreen="true" data-show-refresh="true"
+    
+    
+    data-buttons-class="warning"
+    data-pagination="true"
+    data-url="http://localhost:3000/api/services"
+    data-card-view="false"
+    data-advanced-search="true"
+    data-id-table="advancedTable"
+    data-show-toggle="true"
+    data-filter-control="true"
+    data-show-search-clear-button="true"
+    data-search-align="left"
+    >
+    <thead>
+        <tr>
+            <th data-field="ServiceID" data-sortable="true" data-filter-control="input">Name</th>
+            <th data-field="status" data-sortable="true" data-filter-control="select">Status</th>
+            <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
+            <th data-field="endpoint" data-sortable="true" data-filter-control="input">endpoint</th>
+            <th data-field="Version">Version</th>
+            <th data-field="dependent_systems" data-sortable="true">dependent_systems</th>
+            <th data-field="Tags">Tags</th>
+            <th data-field="Contact" data-sortable="true">Contact</th>
+            <th data-field="Report">Report</th>
+        </tr>
+    </thead>
+    <tbody class="text-sm">
+
+        {% for service in sap_services.services %}
+
+        <tr>
+            <td>{{ service.name }} </td>
+            <td>
+                {% if service.status == "Running" %}
+                    <span class="badge text-bg-success">{{ service.status }}</span>
+
+                {% else %}
+                
+                <span class="badge text-bg-warning">{{ service.status }}</span>
+
+                {% endif %}
+
+            </td>
+            <td>{{ service.description }}</td>
+            <td>{{ service.endpoint }}</td>
+            <td>{{ service.version }}</td>
+            <td>
+              {% for dep in service.dependent_systems %} 
+              <span class="badge text-bg-warning">{{dep}}</span>
+
+              {% endfor %}
+            </td>
+            <td>
+              {% for tag in service.tags %} 
+              <span class="badge text-bg-warning">{{tag}}</span>
+
+              {% endfor %}
+            </td>
+            <td>
+                <span><i class="bi bi-envelope-fill"></i> Mail: some@mail.de</span><br>
+                <span><i class="bi bi-phone"></i> Phone: 1234567890</span>
+  
+              </td>
+            <td><button type="button" class="btn btn-secondary btn-sm">Edit</button>
+                <button type="button" class="btn btn-secondary btn-sm">Delete</button>
+</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}

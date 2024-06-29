@@ -1,5 +1,5 @@
 from hdbcli import dbapi
-from sap import xssec
+# from sap import xssec
 from cfenv import AppEnv
 
 cfenv = AppEnv()    
@@ -20,3 +20,4 @@ def create_security_context(jwt_token):
     uaa_service = cfenv.get_service(name='my-xsuaa')
     security_context = xssec.create_security_context(jwt_token, uaa_service.credentials)
     return security_context
+

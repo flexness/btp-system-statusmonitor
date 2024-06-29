@@ -1,63 +1,61 @@
 from flask import Flask, jsonify, request, Blueprint, render_template, send_from_directory, current_app
 from .services import db_connect, create_security_context
-
+import pandas as pd
 import json
+import requests
+
+session = requests.Session()
+
 # create blueprint for routes
 routes = Blueprint('routes', __name__)
 
-# Load SAP system landscape data from JSON file
-with open('systems.json') as json_file:
-    sap_landscape = json.load(json_file)
 
-with open('sap_services.json') as json_file:
-    sap_services = json.load(json_file)
-
-with open('external_services.json') as json_file:
-    external_services = json.load(json_file)
-
-with open('enterprise_services.json') as json_file:
-    enterprise_services = json.load(json_file)
 @routes.route('/')
 @routes.route('/index')
 def index():
 
     return render_template('index.html',
-        sap_landscape=sap_landscape,
-        sap_services=sap_services,
-        external_services=external_services,
-        enterprise_services=enterprise_services
+
     )
 
 
-def load_json_data(file_path):
-    with open(file_path, 'r') as file:
-        return json.load(file)
+@routes.route('/admin')
+def admin():
+    response = session.get('http://127.0.0.1:3000/api/services')
+    response.raise_for_status()
+    sap_services = response.json()
+
+    return render_template('admin.html',
+        sap_services=sap_services)
+
+@routes.route('/table')
+def table():
+    response = session.get('http://127.0.0.1:3000/api/services')
+    response.raise_for_status()
+    sap_services = response.json()
+
+    return render_template('table.html',
+        sap_services=sap_services)
 
 
-@routes.route('/api/systems/core')
-def api_get_systems():
-    data = load_json_data('systems.json')
-    return jsonify(data)
-
-@routes.route('/api/systems/sap')
-def api_get_sap_services():
-    data = load_json_data('sap_services.json')
-    return jsonify(data)
-
-@routes.route('/api/systems/external')
-def api_get_external_services():
-    data = load_json_data('external_services.json')
-    return jsonify(data)
-
-@routes.route('/api/systems/enterprise')
-def api_get_enterpise_services():
-    data = load_json_data('enterprise_services.json')
-    return jsonify(data)
 
 
 @routes.route('/hello')
 def hello():
     return jsonify('Hello World!')
+
+@routes.route("/dashboard")
+def dashboard():
+    response = session.get('http://127.0.0.1:3000/api/services')
+    response.raise_for_status()
+    sap_services = response.json()
+    return render_template('dashboard.html', 
+        sap_services=sap_services,
+        # Include Dash CSS and JS in the template
+        # dash_css=dash_app._external_stylesheets,
+        # dash_js=dash_app._external_scripts
+    )
+
 
 @routes.route('/time')
 def time():

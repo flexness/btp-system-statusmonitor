@@ -26,3 +26,6 @@
 - `cf create-service xsuaa application my-xsuaa -c xs-security.json`
 - `cf create-service hana hdi-shared my-hana`
 - `cf push` 
+
+## crit notes
+- @ bootstrap table `data-side-pagination="server"` very dangerous (no more refresh, no more pagination, no more filter by sdearch, ..)

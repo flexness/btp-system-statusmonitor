@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block main %}
+
+
+<h1>Table of services</h1>
+
+
+{% from "macros.html" import services_table_view %}
+{{ services_table_view(sap_services) }}
+
+{% endblock %}

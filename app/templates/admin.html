@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block main %}
+<div class="d-flex gap-4 align-items-center">
+  <h1>Table of services</h1>
+
+
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add new service
+  </button>
+  
+</div>
+
+  {% from "macros.html" import services_table_admin %}
+  {{ services_table_admin(sap_services) }}
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add new service to list</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="service_name" placeholder="service_text">
+                <label for="service_name">service name</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="service_endpoint" placeholder="service_endpoint">
+                <label for="service_endpoint">service_endpoint</label>
+              </div>
+              <div class="form-floating mb-3">
+                <textarea style="height:100px;" class="form-control" id="service_desc" placeholder="service_desc"></textarea>
+                <label for="service_desc">service_desc</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                <label for="service_contact">service_contact</label>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %} 

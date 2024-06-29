@@ -25,3 +25,15 @@ class Config:
         'clientsecret': os.environ.get('XSUAA_CLIENTSECRET'),
         'url': os.environ.get('XSUAA_URL')
     }
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+class ProductionConfig(Config):
+    pass
+
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
