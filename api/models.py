@@ -46,10 +46,3 @@ class Tag(Base):
 
     def __repr__(self):
         return f"<Tag(name='{self.name}')>"
-
-# Example of initializing the database
-if __name__ == '__main__':
-    from sqlalchemy import create_engine
-    DATABASE_URL = "sqlite:///main.db"
-    engine = create_engine(DATABASE_URL, echo=True)
-    Base.metadata.create_all(engine)
