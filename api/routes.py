@@ -25,9 +25,6 @@ def api_get_services():
     session = Session()
     print("CHECK")
     try:
-        services1 = session.query(Service)
-        print("CHECK")
-        print(services1)
         # Query all services with tags and dependent services eagerly loaded
         services = session.query(Service).options(
             # Load tags and dependent_services eagerly to avoid lazy loading
@@ -66,15 +63,15 @@ def api_get_service(id):
         if service:
             # Serialize service data to JSON
             service_data = {
-                'id': service.id,
-                'name': service.name,
-                'status': service.status,
-                'description': service.description,
-                'endpoint': service.endpoint,
-                'version': service.version,
-                'dependent_systems': service.dependent_systems,
-                'contact': service.contact,
-                'tags': [tag.name for tag in service.tags]  # Assuming tags are loaded in the Service model
+            'id': service.id,
+            'name': service.name,
+            'status': service.status,
+            'description': service.description,
+            'endpoint': service.endpoint,
+            'version': service.version,
+            'dependent_systems': [dep_service.name for dep_service in service.dependent_services],
+            'contact': service.contact,
+            'tags': [tag.name for tag in service.tags]
             }
 
             return jsonify(service_data)
