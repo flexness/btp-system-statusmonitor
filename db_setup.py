@@ -95,3 +95,4 @@ def setup_database():
     session.close()
 
 setup_database()
+# run python db_setup.py in cmd

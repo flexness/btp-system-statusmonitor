@@ -23,7 +23,6 @@ Session = sessionmaker(bind=engine)
 def api_get_services():
     # Create a session
     session = Session()
-    print("CHECK")
     try:
         # Query all services with tags and dependent services eagerly loaded
         services = session.query(Service).options(

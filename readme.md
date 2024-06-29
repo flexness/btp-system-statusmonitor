@@ -8,15 +8,19 @@
 
 ## install
 - `pip install -r requirements.txt`
-- `npm i` for tailwind/flowbite (if not using flowbite/tailwind CDNs)
-- rename `.env.example` & setup env vars
+- `python db_setup.py` to init db (if not using shipped example sqlite main.db)
 - `python run.py`
+- rename `.env.example` & setup env vars
 
 ## develop locally
 - `npm i browser-sync`
 
 ## develop in bas
 - tbc
+
+## models
+- Service/services incl. self-dependencies / association-table
+- Tag/tags incl. service-dependencies / association-table
 
 
 ## sap tech overview
