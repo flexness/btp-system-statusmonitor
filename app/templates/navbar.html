@@ -1,4 +1,4 @@
-<nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
+<nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary shadow">
     <div class="container-fluid">
       <a class="d-flex align-items-center navbar-brand gap-2" href="#"> <img src="{{ url_for('static', filename='logo.png') }}" style="height: 32px;" alt=""> <span class="fw-bold">system landscape health</span></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,10 +20,14 @@
           </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-          <div id="btnSwitch" class="btn btn-outline-success">Theme</div>
+
+            <input type="text" id="searchInput" class="form-control" placeholder="Type to search...">
+            <div id="searchResults" class="position-absolute top-100"></div>
+
         </form>
+        <div id="btnSwitch" class="btn btn-outline-success">Theme</div>
       </div>
     </div>
   </nav>
+
+

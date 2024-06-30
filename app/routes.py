@@ -3,8 +3,8 @@ from .services import db_connect, create_security_context
 import pandas as pd
 import json
 import requests
+from api.models import Service
 
-session = requests.Session()
 
 # create blueprint for routes
 routes = Blueprint('routes', __name__)
@@ -21,15 +21,24 @@ def index():
 
 @routes.route('/admin')
 def admin():
-    response = session.get('http://127.0.0.1:3000/api/services')
-    response.raise_for_status()
-    sap_services = response.json()
+    session = requests.Session()
+    services = session.get('http://127.0.0.1:3000/api/services')
+    services.raise_for_status()
+    services = services.json()
+
+    tags = session.get('http://127.0.0.1:3000/api/tags')
+    tags.raise_for_status()
+    tags = tags.json()
+    print("CHECK", tags)
 
     return render_template('admin.html',
-        sap_services=sap_services)
+        services=services,
+        tags=tags
+        )
 
-@routes.route('/table')
+@routes.route('/services')
 def table():
+    session = requests.Session()
     response = session.get('http://127.0.0.1:3000/api/services')
     response.raise_for_status()
     sap_services = response.json()
@@ -37,7 +46,48 @@ def table():
     return render_template('table.html',
         sap_services=sap_services)
 
+@routes.route('/service/<int:id>')
+def get_service(id):
+    session = requests.Session()
+    response = session.get(f'http://127.0.0.1:3000/api/service/{id}')
+    response.raise_for_status()
+    service = response.json()
 
+    return render_template('service.html',
+        service=service)
+
+
+# Example route for search
+@routes.route('/search', methods=['GET'])
+def search_services():
+    query_string = request.args.get('q', '').strip()
+
+    from api.routes import Session
+    session = Session()
+
+    if not query_string:
+        return jsonify({'error': 'No search query provided'})
+
+    try:
+        # Perform a basic search using SQLAlchemy like operator
+        search_results = session.query(Service).filter(
+            Service.name.ilike(f'%{query_string}%')
+        ).all()
+
+        # Serialize search results to JSON
+        results_data = [{
+            'id': service.id,
+            'name': service.name,
+            'description': service.description,
+            'endpoint': service.endpoint,
+            'tags': [tag.name for tag in service.tags]
+            # Add more fields as needed
+        } for service in search_results]
+
+        return jsonify({'results': results_data})
+
+    finally:
+        session.close()
 
 
 @routes.route('/hello')
@@ -46,6 +96,7 @@ def hello():
 
 @routes.route("/dashboard")
 def dashboard():
+    session = requests.Session()
     response = session.get('http://127.0.0.1:3000/api/services')
     response.raise_for_status()
     sap_services = response.json()

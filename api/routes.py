@@ -23,6 +23,7 @@ Session = sessionmaker(bind=engine)
 def api_get_services():
     # Create a session
     session = Session()
+    print("CHECK")
     try:
         # Query all services with tags and dependent services eagerly loaded
         services = session.query(Service).options(
@@ -81,7 +82,16 @@ def api_get_service(id):
         session.close()
 
 
-
+@api.route('/tags')
+def api_get_tags():
+    session = Session()
+    try:
+        tags = session.query(Tag).all()
+        tags_data = [{'id': tag.id, 'name': tag.name} for tag in tags]
+        
+        return jsonify({'tags': tags_data})
+    finally:
+        session.close()
 
 
 

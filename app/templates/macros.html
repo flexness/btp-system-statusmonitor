@@ -157,3 +157,12 @@
     </tbody>
 </table>
 {% endmacro %}
+
+
+{% macro tags_list(tags) %}
+{% for tag in tags.tags %}
+  <span class="badge text-bg-warning">{{tag.name}}</span>
+
+{% endfor %}
+
+{% endmacro %}

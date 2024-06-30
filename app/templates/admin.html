@@ -1,28 +1,41 @@
 {% extends "layout.html" %}
 {% block main %}
+{% from "macros.html" import services_table_admin,tags_list %}
 <div class="d-flex gap-4 align-items-center">
-  <h1>Table of services</h1>
 
 
+  <h2>Table of services</h2>
 
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
     Add new service
   </button>
   
 </div>
 
-  {% from "macros.html" import services_table_admin %}
-  {{ services_table_admin(sap_services) }}
+  {{ services_table_admin(services) }}
+
+  <div class="d-flex gap-4 align-items-center">
 
 
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <h2>Tags</h2>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tagModal">
+      Add new tag
+    </button>
+    
+  </div>
+
+  {{ tags_list(tags) }}
+  <!-- Modal service -->
+  <div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Add new service to list</h1>
+          <h1 class="modal-title fs-5" id="serviceModalLabel">Add new service to list</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -56,6 +69,28 @@
     </div>
   </div>
 
+  <!-- Modal service -->
+  <div class="modal fade" id="tagModal" tabindex="-1" aria-labelledby="tagModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="tagModalLabel">Add new tag</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="tag_name" placeholder="tag_name">
+                <label for="servictag_namee_name">tag name</label>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 {% endblock %} 
+

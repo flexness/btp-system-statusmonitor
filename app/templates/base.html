@@ -89,5 +89,46 @@
 
   <script src="{{ url_for('static', filename='theme.js') }}"></script>
 
+  <script>
+    $(document).ready(function() {
+        $('#searchInput').keyup(function() {
+            var query = $(this).val().trim();
+            if (query.length > 0) {
+                $.ajax({
+                    url: '/search',  // Flask route to handle search
+                    method: 'GET',
+                    data: { q: query },
+                    success: function(response) {
+                        displayResults(response.results);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching search results:', error);
+                    }
+                });
+            } else {
+                $('#searchResults').empty();  // Clear results if query is empty
+            }
+        });
+
+        function displayResults(results) {
+            var resultsContainer = $('#searchResults');
+            resultsContainer.empty();
+
+            if (results.length > 0) {
+                var resultList = $('<ul class="list-group"></ul>');
+                results.forEach(function(result) {
+                    var listItem = $('<li class="list-group-item"></li>')
+                        .append('<a href="http://127.0.0.1:3000/service/' + result.id + '">' + result.name + ' - ' + result.id + '</a>');
+                    resultList.append(listItem);
+                });
+                resultsContainer.append(resultList);
+            } else {
+                resultsContainer.append('<ul class="list-group"><li class="list-group-item">No Results</li</ul>');
+            }
+        }
+    });
+    </script>
+
+
 </body>
 </html>
