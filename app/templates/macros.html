@@ -14,7 +14,7 @@
     
     data-buttons-class="warning"
     data-pagination="true"
-    data-url="http://localhost:3000/api/services"
+    data-url="http://127.0.0.1:3000/api/services"
     data-card-view="false"
     data-advanced-search="true"
     data-id-table="advancedTable"
@@ -90,7 +90,7 @@
     
     data-buttons-class="warning"
     data-pagination="true"
-    data-url="http://localhost:3000/api/services"
+    data-url="http://127.0.0.1:3000/api/services"
     data-card-view="false"
     data-advanced-search="true"
     data-id-table="advancedTable"
@@ -160,9 +160,9 @@
 
 
 {% macro tags_list(tags) %}
-{% for tag in tags.tags %}
-  <span class="badge text-bg-warning">{{tag.name}}</span>
+    {% for tag in tags.tags %}
+    <span class="badge text-bg-warning">{{tag.name}}</span>
 
-{% endfor %}
+    {% endfor %}
 
 {% endmacro %}

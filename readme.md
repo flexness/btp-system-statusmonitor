@@ -1,8 +1,8 @@
 # flask webap for sap btp statusmonitor *wip*
 - flask for backend/api
-- dash for frontend/display
+- bootstrap + bootstrap-tables + boostrap-icons
+- dash for charts/graphs 
 - JWT, Login/User management
-- flowbite/tailwind 
 - optional: htmx, brwoser-sync, db-alternative, sqlite
 
 
@@ -32,4 +32,4 @@
 - `cf push` 
 
 ## crit notes
-- @ bootstrap table `data-side-pagination="server"` very dangerous (no more refresh, no more pagination, no more filter by sdearch, ..)
+- @ bootstrap table `data-side-pagination="server"` very dangerous (no more refresh, no more pagination, no more filter by search, ..)

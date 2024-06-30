@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block main %}
 {% from "macros.html" import services_table_admin,tags_list %}
-<div class="d-flex gap-4 align-items-center">
+
+<div  class="shadow-sm p-4">
+  <div class="d-flex gap-4 align-items-center">
 
 
   <h2>Table of services</h2>
@@ -13,8 +15,11 @@
   </button>
   
 </div>
-
   {{ services_table_admin(services) }}
+
+</div>
+
+<div  class="shadow-sm p-4 mt-4">
 
   <div class="d-flex gap-4 align-items-center">
 
@@ -30,6 +35,7 @@
   </div>
 
   {{ tags_list(tags) }}
+</div>
   <!-- Modal service -->
   <div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
