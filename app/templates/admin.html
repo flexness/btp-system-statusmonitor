@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block main %}
-{% from "macros.html" import services_table_admin,tags_list %}
+{% from "macros.html" import services_table_admin, tags_list %}
 
-<div  class="shadow-sm p-4">
+<div  class="p-4">
   <div class="d-flex gap-4 align-items-center">
 
 
@@ -19,7 +19,7 @@
 
 </div>
 
-<div  class="shadow-sm p-4 mt-4">
+<div  class="shadow-sm p-4 mt-4 mb-4">
 
   <div class="d-flex gap-4 align-items-center">
 
@@ -33,7 +33,6 @@
     </button>
     
   </div>
-
   {{ tags_list(tags) }}
 </div>
   <!-- Modal service -->

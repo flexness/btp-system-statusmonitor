@@ -14,10 +14,9 @@
     
     data-buttons-class="warning"
     data-pagination="true"
-    data-url="http://127.0.0.1:3000/api/services"
+    data-url="http://localhost:3000/api/services/"
     data-card-view="false"
     data-advanced-search="true"
-    data-id-table="advancedTable"
     data-show-toggle="true"
     data-filter-control="true"
     data-show-search-clear-button="true"
@@ -64,7 +63,7 @@
             </td>
             <td>
               {% for tag in service.tags %} 
-              <span class="badge text-bg-warning">{{tag}}</span>
+              <span class="badge text-bg-warning">{{tag.name}}</span>
 
               {% endfor %}
             </td>
@@ -83,17 +82,15 @@
 
 
 
-{% macro services_table_admin(sap_services) %}
+{% macro services_table_admin(services) %}
 <table id="table" data-toggle="table" data-search="true" data-sortable="true" data-show-columns="true"
     data-show-fullscreen="true" data-show-refresh="true"
     
     
     data-buttons-class="warning"
     data-pagination="true"
-    data-url="http://127.0.0.1:3000/api/services"
     data-card-view="false"
     data-advanced-search="true"
-    data-id-table="advancedTable"
     data-show-toggle="true"
     data-filter-control="true"
     data-show-search-clear-button="true"
@@ -101,23 +98,22 @@
     >
     <thead>
         <tr>
-            <th data-field="ServiceID" data-sortable="true" data-filter-control="input">Name</th>
+            <th data-field="name" data-sortable="true" data-filter-control="input">Name</th>
             <th data-field="status" data-sortable="true" data-filter-control="select">Status</th>
             <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
             <th data-field="endpoint" data-sortable="true" data-filter-control="input">endpoint</th>
-            <th data-field="Version">Version</th>
-            <th data-field="dependent_systems" data-sortable="true">dependent_systems</th>
-            <th data-field="Tags">Tags</th>
-            <th data-field="Contact" data-sortable="true">Contact</th>
-            <th data-field="Report">Report</th>
+            <th data-field="version">Version</th>
+            <th data-field="dependent_services" data-sortable="true">dependent_systems</th>
+            <th data-field="tags">Tags</th>
+            <th data-field="contact" data-sortable="true">Contact</th>
+            <th data-field="manage">Manage</th>
         </tr>
     </thead>
     <tbody class="text-sm">
 
-        {% for service in sap_services.services %}
-
-        <tr>
-            <td>{{ service.name }} </td>
+        {% for service in services %}
+        <tr class="check">
+            <td>{{ service.name }} dwa wadad </td>
             <td>
                 {% if service.status == "Running" %}
                     <span class="badge text-bg-success">{{ service.status }}</span>
@@ -133,14 +129,14 @@
             <td>{{ service.endpoint }}</td>
             <td>{{ service.version }}</td>
             <td>
-              {% for dep in service.dependent_systems %} 
-              <span class="badge text-bg-warning">{{dep}}</span>
+              {% for dep in service.dependent_services %} 
+              <span class="badge text-bg-warning">{{ dep.name }}</span>
 
               {% endfor %}
             </td>
             <td>
-              {% for tag in service.tags %} 
-              <span class="badge text-bg-warning">{{tag}}</span>
+              {% for tag in service.tags %}
+              <span class="badge text-bg-warning">{{tag.name}}</span>
 
               {% endfor %}
             </td>
@@ -160,7 +156,7 @@
 
 
 {% macro tags_list(tags) %}
-    {% for tag in tags.tags %}
+    {% for tag in tags %}
     <span class="badge text-bg-warning">{{tag.name}}</span>
 
     {% endfor %}

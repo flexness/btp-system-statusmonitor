@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Table, ForeignKey, UniqueConstraint, CheckConstraint
 
 # SQLAlchemy setup
 DATABASE_URL = "sqlite:///main.db"
@@ -12,8 +13,11 @@ session = Session()
 # Association table for service dependencies
 service_dependencies = Table('service_dependencies', Base.metadata,
     Column('service_id', Integer, ForeignKey('services.id'), primary_key=True),
-    Column('dependent_service_id', Integer, ForeignKey('services.id'), primary_key=True)
+    Column('dependent_service_id', Integer, ForeignKey('services.id'), primary_key=True)  ,  
+    UniqueConstraint('service_id', 'dependent_service_id', name='unique_service_dependency'),
+    CheckConstraint('service_id != dependent_service_id', name='check_no_self_dependency')
 )
+
 
 # Association table for service tags
 service_tags = Table('service_tags', Base.metadata,

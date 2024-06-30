@@ -3,12 +3,13 @@ from .services import db_connect, create_security_context
 import pandas as pd
 import json
 import requests
-from api.models import Service
+from api.models import Service, Tag
 
 
 # create blueprint for routes
 routes = Blueprint('routes', __name__)
 
+session = requests.Session()
 
 @routes.route('/')
 @routes.route('/index')
@@ -21,15 +22,15 @@ def index():
 
 @routes.route('/admin')
 def admin():
-    session = requests.Session()
-    services = session.get('http://127.0.0.1:3000/api/services')
-    services.raise_for_status()
-    services = services.json()
+    services = session.get('http://127.0.0.1:3000/api/services').json()
+    tags = session.get('http://127.0.0.1:3000/api/tags').json()
 
-    tags = session.get('http://127.0.0.1:3000/api/tags')
-    tags.raise_for_status()
-    tags = tags.json()
-    print("CHECK", tags)
+    # services = session.get('http://127.0.0.1:3000/api/services')
+    # services.raise_for_status()
+
+    # tags = session.get('http://127.0.0.1:3000/api/tags')
+    # tags.raise_for_status()
+
 
     return render_template('admin.html',
         services=services,
@@ -38,7 +39,6 @@ def admin():
 
 @routes.route('/services')
 def table():
-    session = requests.Session()
     response = session.get('http://127.0.0.1:3000/api/services')
     response.raise_for_status()
     sap_services = response.json()
@@ -48,8 +48,7 @@ def table():
 
 @routes.route('/service/<int:id>')
 def get_service(id):
-    session = requests.Session()
-    response = session.get(f'http://127.0.0.1:3000/api/service/{id}')
+    response = session.get(f'http://127.0.0.1:3000/api/services/{id}')
     response.raise_for_status()
     service = response.json()
 
@@ -96,7 +95,6 @@ def hello():
 
 @routes.route("/dashboard")
 def dashboard():
-    session = requests.Session()
     response = session.get('http://127.0.0.1:3000/api/services')
     response.raise_for_status()
     sap_services = response.json()

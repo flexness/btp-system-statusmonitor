@@ -17,6 +17,21 @@ Session = sessionmaker(bind=engine)
 
 
 
+@api.route('/tags')
+def api_get_tags():
+    session = Session()
+    try:
+        tags = session.query(Tag).all()
+        tags_data = [{'id': tag.id, 'name': tag.name} for tag in tags]
+        
+        return jsonify({'tags': tags_data})
+    finally:
+        session.close()
+
+
+
+""" 
+
 
 # Route to get all services
 @api.route('/services')
@@ -81,18 +96,7 @@ def api_get_service(id):
     finally:
         session.close()
 
-
-@api.route('/tags')
-def api_get_tags():
-    session = Session()
-    try:
-        tags = session.query(Tag).all()
-        tags_data = [{'id': tag.id, 'name': tag.name} for tag in tags]
-        
-        return jsonify({'tags': tags_data})
-    finally:
-        session.close()
-
+ """
 
 
 

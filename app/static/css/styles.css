@@ -4,3 +4,7 @@
 html {
     font-size: 14px;
   }
+
+.main-container {
+    min-height: 100vH !important;
+}
