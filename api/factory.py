@@ -2,12 +2,8 @@ from flask import Flask, Blueprint
 from flask_restx import Api
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
 
-Base = declarative_base()
-engine = create_engine('sqlite:///main.db')
-session_factory = sessionmaker(bind=engine)
-Session = scoped_session(session_factory)
+from database import Session
 
 api_blueprint = Blueprint('api', __name__)
 api = Api(api_blueprint, version='1.0', title='Services API', description='Simple API to provide endpoints for managing services, tags, etc.')
@@ -21,7 +17,3 @@ def create_api():
     register_routes(api)
 
     return api_blueprint
-
-
-def init_db():
-    Base.metadata.create_all(engine)

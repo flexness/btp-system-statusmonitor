@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Table, ForeignKey, UniqueConstra
 
 from sqlalchemy.orm import relationship, validates
 
-from .factory import Base
+from database import Base
 
 # Association table for service dependencies
 service_dependencies = Table('service_dependencies', Base.metadata,
@@ -10,7 +10,6 @@ service_dependencies = Table('service_dependencies', Base.metadata,
     Column('dependent_service_id', Integer, ForeignKey('services.id'), primary_key=True)  ,  
     UniqueConstraint('service_id', 'dependent_service_id', name='unique_service_dependency'),
     CheckConstraint('service_id != dependent_service_id', name='check_no_self_dependency')
-
 
 )
 

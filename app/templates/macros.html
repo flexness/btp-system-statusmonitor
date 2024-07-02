@@ -96,7 +96,8 @@
     data-search-align="left"
     >
     <thead>
-        <tr>
+        <tr>            
+            <th data-field="id">id</th>
             <th data-field="name" data-sortable="true" data-filter-control="input">Name</th>
             <th data-field="status" data-sortable="true" data-filter-control="select">Status</th>
             <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
@@ -112,6 +113,7 @@
 
         {% for service in services %}
         <tr class="check">
+            <td>{{ service.id }} </td>
             <td>{{ service.name }} </td>
             <td>
                 {% if service.status == "Running" %}

@@ -33,3 +33,4 @@
 
 ## crit notes
 - @ bootstrap table `data-side-pagination="server"` very dangerous (no more refresh, no more pagination, no more filter by search, ..)
+- @ bootstrap table data-url e.g. `data-url="http://127.0.0.1:3000/api/services/"` table rows get auto-rendered!

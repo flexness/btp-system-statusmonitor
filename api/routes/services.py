@@ -3,9 +3,12 @@ from flask_restx import Namespace, Resource, fields, marshal_with
 from sqlalchemy.orm import scoped_session
 from ..models import Service, Tag
 from ..factory import Session
+from flask import request
+from ..models import service_dependencies
 
 from ..custom_fields import DepthLimitedNested
 
+from ..models import service_tags
 from .tags import tag_model
 
 ns = Namespace('services', description='Service operations')
@@ -40,15 +43,50 @@ class ServiceList(Resource):
     @ns.expect(service_model)
     @ns.marshal_with(service_model, code=201)
     def post(self):
+        # Extract dependencies from the payload
+        data = request.json  # Change to accept JSON
+        print(request.json)
+
+        dependent_service_names = data.get('dependent_services', [])
+        selected_tags = data.get('tags', [])
+        print("api json rec: ", dependent_service_names, selected_tags)
+
         new_service = Service(
-            name=ns.payload.get('name'),
-            status=ns.payload.get('status'),
-            description=ns.payload.get('description'),
-            endpoint=ns.payload.get('endpoint'),
-            version=ns.payload.get('version'),
-            contact=ns.payload.get('contact')
+            name=data.get('name') ,
+            status=data.get('status'),
+            description=data.get('description'),
+            endpoint=data.get('endpoint'),
+            version=data.get('version'),
+            contact=data.get('contact')
         )
         session.add(new_service)
+        session.commit()
+
+        # Retrieve the new service ID
+        new_service_id = new_service.id
+
+        # Retrieve IDs of dependent services from the database
+        dependent_services = session.query(Service).filter(Service.id.in_(dependent_service_names)).all()
+
+        # Add entries to the service_dependencies table
+        for dependent_service in dependent_services:
+            print(dependent_service.id)
+            session.execute(service_dependencies.insert().values(
+            service_id=new_service_id,
+            dependent_service_id=dependent_service.id
+        ))
+
+        # Retrieve IDs of dependent services from the database
+        tags = session.query(Tag).filter(Tag.id.in_(selected_tags)).all()
+
+        # Add entries to the service_dependencies table
+        for tag in tags:
+            print(tag.id)
+            session.execute(service_tags.insert().values(
+            service_id=new_service_id,
+            tag_id=tag.id
+        ))
+
         session.commit()
         return new_service, 201
 

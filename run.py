@@ -1,11 +1,15 @@
 from app.factory import create_app
-from api.factory import create_api, init_db
-
+from api.factory import create_api
+from database import init_db
 from config import config
 
-def run_app():
-# create app instance
+def run_app():  
+    # create app instance
     app = create_app()
+
+    # init db if not existing on app startup
+    # init_db()    
+
     api_blueprint = create_api()
 
     # Register the API blueprint with the main app

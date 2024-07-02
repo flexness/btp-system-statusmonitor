@@ -73,32 +73,51 @@
           <h1 class="modal-title fs-5" id="serviceModalLabel">Add new service to list</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body overflow-auto">
 
           <form action="{{url_for('routes.add_service')}}" method="post" id="addService">
 
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="service_name" id="service_name" placeholder="service_text">
+                <input type="text" class="form-control" name="service_name" id="service_name" placeholder="service_text" required>
                 <label for="service_name">service name</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="service_endpoint" id="service_endpoint" placeholder="service_endpoint">
+                <input type="text" class="form-control" name="service_endpoint" id="service_endpoint" placeholder="service_endpoint" required>
                 <label for="service_endpoint">service_endpoint</label>        
                 <button type="button" onclick="checkServiceAvailability()">Check Availability</button>
                 <p id="statusDisplay"></p>
               </div>
               <div class="form-floating mb-3">
-                <textarea style="height:100px;" class="form-control" name="service_desc" id="service_desc" placeholder="service_desc"></textarea>
+                <textarea style="height:100px;" class="form-control" name="service_desc" id="service_desc" placeholder="service_desc" required></textarea>
                 <label for="service_desc">service_desc</label>
               </div>
               <div class="form-floating mb-3">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                <label for="service_contact">service_contact</label>
+                <input type="text" class="form-control" name="service_version" id="service_version" placeholder="service_version" required>
+                <label for="service_version">service_version</label>
+              </div>
+              <div class="form-floating mb-3">
+                Select dependencies:
+                  {% for service in services %}      
+                  <div class="p-1 m-1 d-inline-block bg-light rounded">   
+                  <input class="form-check-input" name="services" type="checkbox" id="service{{service.id}}" value="{{service.id}}" aria-label="...">
+                      
+                  <label class="form-check-label" for="service{{service.id}}">
+                    {{service.name}}
+                  </label>     
+                </div>
+                  {% endfor %}
+              </div>
+              <div class="form-floating mb-3">
+                Select tags:
+                  {% for tag in tags %}      
+                  <div class="p-1 m-1 d-inline-block bg-light rounded">   
+                  <input class="form-check-input" name="tags" type="checkbox" id="checkbox{{tag.id}}" value="{{tag.id}}" aria-label="...">
+                      
+                  <label class="form-check-label" for="checkbox{{tag.id}}">
+                    {{tag.name}}
+                  </label>     
+                </div>
+                  {% endfor %}
               </div>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
@@ -112,7 +131,7 @@
     </div>
   </div>
 
-  <!-- Modal service -->
+  <!-- Modal tag -->
   <div class="modal fade" id="tagModal" tabindex="-1" aria-labelledby="tagModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -123,7 +142,7 @@
         <div class="modal-body">
           <div class="form-floating mb-3">
             <form action="{{url_for('routes.add_tag')}}" method="post" id="addTag">
-              <input type="text" class="form-control" name="tag_name" id="tag_name" placeholder="tag_name">
+              <input type="text" class="form-control" name="tag_name" id="tag_name" placeholder="tag_name" required>
               <label for="tag_name">tag name</label>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-primary">Save changes</button>
