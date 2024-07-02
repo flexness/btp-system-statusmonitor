@@ -4,6 +4,7 @@ from flask_restx import Namespace, Resource, fields, marshal_with
 from sqlalchemy.orm import scoped_session
 from ..models import Tag, Tag
 from ..factory import Session
+from flask import request
 
 ns = Namespace('tags', description='tags to group or mark tags')
 session = scoped_session(Session)
@@ -27,9 +28,10 @@ class TagList(Resource):
     @ns.expect(tag_model)
     @ns.marshal_with(tag_model, code=201)
     def post(self):
-        new_tag = Tag(
-            name=ns.payload['name']
-        )
+        data = request.json  # Change to accept JSON
+        name = data.get('name')  # Extract the name from JSON data
+        print(name)
+        new_tag = Tag(name=name)
         session.add(new_tag)
         session.commit()
         return new_tag, 201

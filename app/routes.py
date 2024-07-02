@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, Blueprint, render_template, send_from_directory, current_app
+from flask import Flask, jsonify, request, Blueprint, url_for, flash, redirect, render_template, send_from_directory, current_app
 from .services import db_connect, create_security_context
 import pandas as pd
 import json
@@ -45,6 +45,50 @@ def table():
 
     return render_template('table.html',
         sap_services=sap_services)
+
+@routes.route("/addtag", methods=["POST"])
+def add_tag():
+    if request.method == 'POST':
+        print("1")
+        tag = request.form.get('tag_name')
+        if tag is not None:
+            try:
+                response = requests.post('http://127.0.0.1:3000/api/tags', json={'name': tag})            
+                response.raise_for_status()
+                print(tag)
+                flash('Tag added successfully!', 'success')
+            except requests.exceptions.RequestException as e:
+                print(e)
+                flash('Failed to add tag. Please try again.', 'error')
+        else:
+            flash('Please enter a tag name.', 'error')
+    return redirect(url_for('routes.admin'))
+
+
+@routes.route("/addservice", methods=["POST"])
+def add_service():
+    if request.method == 'POST':
+        service_data = {
+            'name': request.form.get('service_name'),
+            'description': request.form.get('service_description'),
+            'endpoint': request.form.get('service_endpoint'),
+            'version': request.form.get('service_name'),
+            'contact': request.form.get('service_contact')
+        }
+        if service_data is not None:
+            try:                
+                response = requests.post('http://127.0.0.1:3000/api/services', json=service_data)        
+                response.raise_for_status()
+                print("new service :", service_data)
+                flash('Tag added successfully!', 'success')
+            except requests.exceptions.RequestException as e:
+                print(e)
+                flash('Failed to add tag. Please try again.', 'error')
+        else:
+            flash('Please enter a tag name.', 'error')
+    return redirect(url_for('routes.admin'))
+
+
 
 @routes.route('/service/<int:id>')
 def get_service(id):

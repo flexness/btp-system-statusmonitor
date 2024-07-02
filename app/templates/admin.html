@@ -1,7 +1,37 @@
 {% extends "layout.html" %}
 {% block main %}
 {% from "macros.html" import services_table_admin, tags_list %}
+<script>
+  async function checkServiceAvailability() {
+      const endpoint = document.getElementById('service_endpoint').value;
+      const statusDisplay = document.getElementById('statusDisplay');
 
+      if (!endpoint) {
+        console.log('no endpoint')
+        statusDisplay.textContent = 'Please enter a service endpoint';
+        statusDisplay.style.color = 'red';
+        return;
+      } else {
+          try {
+              const response = await fetch(endpoint);
+              console.log(response)
+              if (response.ok) {
+                  statusDisplay.textContent = 'Service is available';
+                  statusDisplay.style.color = 'green';
+              } else if (response) {
+                
+              }
+              else {
+                  statusDisplay.textContent = `Service returned status: ${response.status}`;
+                  statusDisplay.style.color = 'orange';
+              }
+          } catch (error) {
+              statusDisplay.textContent = 'Service is unavailable';
+              statusDisplay.style.color = 'red';
+          }
+        }
+      }
+</script>
 <div  class="p-4">
   <div class="d-flex gap-4 align-items-center">
 
@@ -44,16 +74,21 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="service_name" placeholder="service_text">
+
+          <form action="{{url_for('routes.add_service')}}" method="post" id="addService">
+
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" name="service_name" id="service_name" placeholder="service_text">
                 <label for="service_name">service name</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="service_endpoint" placeholder="service_endpoint">
-                <label for="service_endpoint">service_endpoint</label>
+                <input type="text" class="form-control" name="service_endpoint" id="service_endpoint" placeholder="service_endpoint">
+                <label for="service_endpoint">service_endpoint</label>        
+                <button type="button" onclick="checkServiceAvailability()">Check Availability</button>
+                <p id="statusDisplay"></p>
               </div>
               <div class="form-floating mb-3">
-                <textarea style="height:100px;" class="form-control" id="service_desc" placeholder="service_desc"></textarea>
+                <textarea style="height:100px;" class="form-control" name="service_desc" id="service_desc" placeholder="service_desc"></textarea>
                 <label for="service_desc">service_desc</label>
               </div>
               <div class="form-floating mb-3">
@@ -65,10 +100,13 @@
                   </select>
                 <label for="service_contact">service_contact</label>
               </div>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+  
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          footer
         </div>
       </div>
     </div>
@@ -83,16 +121,20 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="tag_name" placeholder="tag_name">
-                <label for="servictag_namee_name">tag name</label>
-              </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+          <div class="form-floating mb-3">
+            <form action="{{url_for('routes.add_tag')}}" method="post" id="addTag">
+              <input type="text" class="form-control" name="tag_name" id="tag_name" placeholder="tag_name">
+              <label for="tag_name">tag name</label>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+          </div>
+          </div>
+          <div class="modal-footer">
+   footer
+          </div>
       </div>
+      
     </div>
   </div>
 

@@ -7,14 +7,13 @@
 {% endmacro %}
 
 
-{% macro services_table_view(sap_services) %}
+{% macro services_table_view(services) %}
 <table id="table" data-toggle="table" data-search="true" data-sortable="true" data-show-columns="true"
     data-show-fullscreen="true" data-show-refresh="true"
     
     
     data-buttons-class="warning"
     data-pagination="true"
-    data-url="http://localhost:3000/api/services/"
     data-card-view="false"
     data-advanced-search="true"
     data-show-toggle="true"
@@ -37,7 +36,7 @@
     </thead>
     <tbody class="text-sm">
 
-        {% for service in sap_services.services %}
+        {% for service in services %}
 
         <tr>
             <td>{{ service.name }} </td>
@@ -113,7 +112,7 @@
 
         {% for service in services %}
         <tr class="check">
-            <td>{{ service.name }} dwa wadad </td>
+            <td>{{ service.name }} </td>
             <td>
                 {% if service.status == "Running" %}
                     <span class="badge text-bg-success">{{ service.status }}</span>

@@ -41,8 +41,8 @@ class ServiceList(Resource):
     @ns.marshal_with(service_model, code=201)
     def post(self):
         new_service = Service(
-            name=ns.payload['name'],
-            status=ns.payload['status'],
+            name=ns.payload.get('name'),
+            status=ns.payload.get('status'),
             description=ns.payload.get('description'),
             endpoint=ns.payload.get('endpoint'),
             version=ns.payload.get('version'),
