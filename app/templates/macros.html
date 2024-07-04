@@ -103,8 +103,8 @@
             <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
             <th data-field="endpoint" data-sortable="true" data-filter-control="input">endpoint</th>
             <th data-field="version">Version</th>
-            <th data-field="dependent_services" data-sortable="true">dependent_systems</th>
-            <th data-field="tags">Tags</th>
+            <th data-field="dependent_services" data-sortable="true" data-filter-control="">dependent_systems</th>
+            <th data-field="tags" data-sortable="true" data-filter-control="check">Tags</th>
             <th data-field="contact" data-sortable="true">Contact</th>
             <th data-field="manage">Manage</th>
         </tr>
@@ -142,9 +142,7 @@
               {% endfor %}
             </td>
             <td>
-                <span><i class="bi bi-envelope-fill"></i> Mail: some@mail.de</span><br>
-                <span><i class="bi bi-phone"></i> Phone: 1234567890</span>
-  
+                <span><i class="bi bi-person"></i> SZ 123456</span><br>
               </td>
             <td><button type="button" class="btn btn-secondary btn-sm">Edit</button>
                 <button type="button" class="btn btn-secondary btn-sm">Delete</button>

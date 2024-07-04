@@ -84,7 +84,7 @@
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" name="service_endpoint" id="service_endpoint" placeholder="service_endpoint" required>
                 <label for="service_endpoint">service_endpoint</label>        
-                <button type="button" onclick="checkServiceAvailability()">Check Availability</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="checkServiceAvailability()">Check Availability</button>
                 <p id="statusDisplay"></p>
               </div>
               <div class="form-floating mb-3">
@@ -98,7 +98,7 @@
               <div class="form-floating mb-3">
                 Select dependencies:
                   {% for service in services %}      
-                  <div class="p-1 m-1 d-inline-block bg-light rounded">   
+                  <div class="p-1 m-1 d-inline-block rounded  bg-body-tertiary">   
                   <input class="form-check-input" name="services" type="checkbox" id="service{{service.id}}" value="{{service.id}}" aria-label="...">
                       
                   <label class="form-check-label" for="service{{service.id}}">
@@ -110,7 +110,7 @@
               <div class="form-floating mb-3">
                 Select tags:
                   {% for tag in tags %}      
-                  <div class="p-1 m-1 d-inline-block bg-light rounded">   
+                  <div class="p-1 m-1 d-inline-block rounded bg-body-tertiary">   
                   <input class="form-check-input" name="tags" type="checkbox" id="checkbox{{tag.id}}" value="{{tag.id}}" aria-label="...">
                       
                   <label class="form-check-label" for="checkbox{{tag.id}}">
