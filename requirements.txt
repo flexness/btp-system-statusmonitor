@@ -3,3 +3,9 @@ cfenv==0.5.3
 hdbcli==2.17.*
 sap-xssec==4.*
 python-dotenv==0.19.2
+
+# task queue
+celery 
+
+# message broker
+redis
