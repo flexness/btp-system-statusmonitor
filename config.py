@@ -9,8 +9,6 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     STATIC_FOLDER = 'static'
 
-    # ALTERNATIVE DB: graphql and flask-sqlalchemy
-
     # HANA DB
     PORT = int(os.environ.get('PORT', 3000))
     HANA = {

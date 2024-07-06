@@ -30,6 +30,7 @@ class Service(Base):
     endpoint = Column(String)
     version = Column(String)
     contact = Column(String)
+    type = Column(String)
 
     tags = relationship('Tag', secondary=service_tags, backref='services')
 

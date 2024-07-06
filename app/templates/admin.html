@@ -38,7 +38,6 @@
 
   <h2>Table of services</h2>
 
-
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
     Add new service
@@ -63,8 +62,39 @@
     </button>
     
   </div>
+
+  {{ service_types | safe}}
   {{ tags_list(tags) }}
 </div>
+        
+<!-- Modal delete service -->
+<div class="modal fade" id="deleteServiceModal" tabindex="-1" aria-labelledby="deleteServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteServiceModalLabel">Add new tag</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-floating mb-3">
+          <form action="{{url_for('routes.delete_service')}}" method="post" id="deleteService">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="service_id" id="service_id">
+
+            Delete?
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Delete</button>
+          </form>
+        </div>
+        </div>
+        <div class="modal-footer">
+ footer
+        </div>
+    </div>
+    
+  </div>
+</div>
+
   <!-- Modal service -->
   <div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -94,6 +124,14 @@
               <div class="form-floating mb-3">
                 <input type="text" class="form-control" name="service_version" id="service_version" placeholder="service_version" required>
                 <label for="service_version">service_version</label>
+              </div>
+              <div class="form-floating mb-3">
+                <select class="form-select form-select-lg mb-3" name="service_type" id="service_type" aria-label=".form-select-sm example">
+                  <option selected>select</option>
+                  {% for service_type in service_types %}
+                  <option value="{{service_type.value}}">{{service_type.value}}</option>
+                  {% endfor %}
+                </select>
               </div>
               <div class="form-floating mb-3">
                 Select dependencies:
@@ -157,6 +195,16 @@
     </div>
   </div>
 
+  <script>
+    // JavaScript to pass the service ID to the modal
+    var deleteServiceModal = document.getElementById('deleteServiceModal');
+    deleteServiceModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var serviceId = button.getAttribute('data-service-id'); // Extract info from data-* attributes
+        var modal = this;
+        modal.querySelector('#service_id').value = serviceId; // Update the input with the service ID
+    });
+</script>
 
 {% endblock %} 
 

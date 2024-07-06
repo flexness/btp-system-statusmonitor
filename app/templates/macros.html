@@ -82,6 +82,7 @@
 
 
 {% macro services_table_admin(services) %}
+
 <table id="table" data-toggle="table" data-search="true" data-sortable="true" data-show-columns="true"
     data-show-fullscreen="true" data-show-refresh="true"
     
@@ -99,13 +100,14 @@
         <tr>            
             <th data-field="id">id</th>
             <th data-field="name" data-sortable="true" data-filter-control="input">Name</th>
-            <th data-field="status" data-sortable="true" data-filter-control="select">Status</th>
+            <th data-field="type" data-sortable="true" data-filter-control="select">Type</th>
+            <th data-field="status" data-width="50" data-sortable="true" data-filter-control="select">Status</th>
             <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
             <th data-field="endpoint" data-sortable="true" data-filter-control="input">endpoint</th>
-            <th data-field="version">Version</th>
+            <th data-field="version" data-width="70">Ver.</th>
             <th data-field="dependent_services" data-sortable="true" data-filter-control="">dependent_systems</th>
             <th data-field="tags" data-sortable="true" data-filter-control="check">Tags</th>
-            <th data-field="contact" data-sortable="true">Contact</th>
+            <th data-field="contact" data-sortable="true" data-width="100">Contact</th>
             <th data-field="manage">Manage</th>
         </tr>
     </thead>
@@ -115,15 +117,19 @@
         <tr class="check">
             <td>{{ service.id }} </td>
             <td>{{ service.name }} </td>
+            <td>{{ service.type }} </td>
+
             <td>
-                {% if service.status == "Running" %}
-                    <span class="badge text-bg-success">{{ service.status }}</span>
-
+                <span id="status-{{ service.id }}" class="badge 
+                {% if service.status == 'up' %}
+                    badge text-bg-success
                 {% else %}
-                
-                <span class="badge text-bg-warning">{{ service.status }}</span>
-
+                    badge text-bg-danger
                 {% endif %}
+                ">
+                    {{ service.status }}
+                </span>
+                <i class="bi bi-arrow-clockwise float-right align-self-center" onclick="refreshStatus('{{ service.id }}')"></i>
 
             </td>
             <td>{{ service.description }}</td>
@@ -144,20 +150,45 @@
             <td>
                 <span><i class="bi bi-person"></i> SZ 123456</span><br>
               </td>
-            <td><button type="button" class="btn btn-secondary btn-sm">Edit</button>
-                <button type="button" class="btn btn-secondary btn-sm">Delete</button>
-</td>
+            <td>
+                <button type="button" class="btn btn-secondary btn-sm">Edit</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteServiceModal" data-service-id="{{ service.id }}">Delete</button>
+        
+                <!-- <button type="button" id="delete-service" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteServiceModal">Delete</button> -->
+
+            </td>
         </tr>
+
         {% endfor %}
     </tbody>
 </table>
+<script>
+    function refreshStatus(serviceId) {
+        fetch(`/check_service/${serviceId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status == 'up') {
+                    document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-danger');
+                    document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-success');
+                    document.getElementById(`status-${serviceId}`).innerText = "up";
+                } else {
+                    document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-success');
+                    document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-danger');
+                    document.getElementById(`status-${serviceId}`).innerText = "down";
+                }
+
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
 {% endmacro %}
 
 
 {% macro tags_list(tags) %}
     {% for tag in tags %}
-    <span class="badge text-bg-warning">{{tag.name}}</span>
-
+        <span class="badge text-bg-warning">{{tag.name}}</span>
     {% endfor %}
 
 {% endmacro %}

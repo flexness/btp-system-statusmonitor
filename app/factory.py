@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from config import Config
+from config import DevelopmentConfig
 
 from dash import Dash, html, dcc, dash_table, callback, Output, Input, State
 import pandas as pd
@@ -12,8 +12,7 @@ def create_app():
     
 
     # set config from config.py
-    app.config.from_object(Config)
-
+    app.config.from_object(DevelopmentConfig)
 
 
     # dash stuff

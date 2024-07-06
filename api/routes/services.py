@@ -2,7 +2,7 @@
 from flask_restx import Namespace, Resource, fields, marshal_with
 from sqlalchemy.orm import scoped_session
 from ..models import Service, Tag
-from ..factory import Session
+from database import Session
 from flask import request
 from ..models import service_dependencies
 
@@ -22,7 +22,8 @@ service_model = ns.model('Service', {
     'endpoint': fields.String(description='The service endpoint'),
     'version': fields.String(description='The service version'),
     'contact': fields.String(description='The service contact'),
-    'tags': fields.List(fields.Nested(tag_model))
+    'tags': fields.List(fields.Nested(tag_model)),
+    'type': fields.String(description='The service type')
     })
 
 # Register the model
@@ -57,7 +58,8 @@ class ServiceList(Resource):
             description=data.get('description'),
             endpoint=data.get('endpoint'),
             version=data.get('version'),
-            contact=data.get('contact')
+            contact=data.get('contact'),
+            type=data.get('type')
         )
         session.add(new_service)
         session.commit()

@@ -3,7 +3,7 @@
 from flask_restx import Namespace, Resource, fields, marshal_with
 from sqlalchemy.orm import scoped_session
 from ..models import Tag, Tag
-from ..factory import Session
+from database import Session
 from flask import request
 
 ns = Namespace('tags', description='tags to group or mark tags')
