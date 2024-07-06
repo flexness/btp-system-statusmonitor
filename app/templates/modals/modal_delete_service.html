@@ -1,0 +1,27 @@
+
+<div class="modal fade" id="deleteServiceModal" tabindex="-1" aria-labelledby="deleteServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteServiceModalLabel">Add new tag</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <form action="{{url_for('routes.delete_service')}}" method="post" id="deleteService">
+              <input type="hidden" name="_method" value="DELETE">
+              <input type="hidden" name="service_id" id="service_id">
+  
+              Delete?
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+          </div>
+          </div>
+          <div class="modal-footer">
+   footer
+          </div>
+      </div>
+      
+    </div>
+  </div>

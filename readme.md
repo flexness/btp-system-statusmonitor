@@ -9,9 +9,13 @@
 
 ## install
 - `pip install -r requirements.txt`
-- `python db_setup.py` to init db (if not using shipped example sqlite main.db)
 - `python run.py`
-- rename `.env.example` & setup env vars
+- rename `.env.example`
+- adjust `Config.py` and `.env`
+- adjust `manifest.yml` 
+- adjust `'schedule': crontab(minute='*/5')` in `status_update.py`
+- `celery -A status_update.celery beat --loglevel=info`
+- `celery -A status_update.celery worker -P solo --loglevel=info -E`
 
 ## develop locally
 - `npm i browser-sync`

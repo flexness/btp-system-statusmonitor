@@ -101,7 +101,7 @@
             <th data-field="id">id</th>
             <th data-field="name" data-sortable="true" data-filter-control="input">Name</th>
             <th data-field="type" data-sortable="true" data-filter-control="select">Type</th>
-            <th data-field="status" data-width="50" data-sortable="true" data-filter-control="select">Status</th>
+            <th data-field="status" data-width="100" data-sortable="true" data-filter-control="select">Status</th>
             <th data-field="description" data-sortable="true" data-filter-control="input">description</th>
             <th data-field="endpoint" data-sortable="true" data-filter-control="input">endpoint</th>
             <th data-field="version" data-width="70">Ver.</th>
@@ -120,7 +120,7 @@
             <td>{{ service.type }} </td>
 
             <td>
-                <span id="status-{{ service.id }}" class="badge 
+                <span id="status-{{ service.id }}" class="fs-6 badge 
                 {% if service.status == 'up' %}
                     badge text-bg-success
                 {% else %}
@@ -148,7 +148,7 @@
               {% endfor %}
             </td>
             <td>
-                <span><i class="bi bi-person"></i> SZ 123456</span><br>
+                <span><i class="bi bi-person"></i>P0000001</span><br>
               </td>
             <td>
                 <button type="button" class="btn btn-secondary btn-sm">Edit</button>
@@ -172,12 +172,16 @@
                     document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-danger');
                     document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-success');
                     document.getElementById(`status-${serviceId}`).innerText = "up";
-                } else {
+                } else if (data.status == 'up') {
                     document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-success');
                     document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-danger');
                     document.getElementById(`status-${serviceId}`).innerText = "down";
                 }
-
+                else {
+                    document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-success');
+                    document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-danger');
+                    document.getElementById(`status-${serviceId}`).innerText = "n/a";
+                }
             })
             .catch(error => console.error('Error:', error));
     }

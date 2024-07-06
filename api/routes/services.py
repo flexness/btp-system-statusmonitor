@@ -1,14 +1,9 @@
 # api/routes/services.py
 from flask_restx import Namespace, Resource, fields, marshal_with
 from sqlalchemy.orm import scoped_session
-from ..models import Service, Tag
+from ..models import Service, Tag, service_dependencies, service_tags
 from database import Session
 from flask import request
-from ..models import service_dependencies
-
-from ..custom_fields import DepthLimitedNested
-
-from ..models import service_tags
 from .tags import tag_model
 
 ns = Namespace('services', description='Service operations')
@@ -29,9 +24,6 @@ service_model = ns.model('Service', {
 # Register the model
 ns.models['Service'] = service_model
 
-# Update the Service model to include the recursive reference
-service_model['dependent_services'] = fields.List(DepthLimitedNested(service_model, max_depth=2))
-
 
 @ns.route('/')
 class ServiceList(Resource):
@@ -44,14 +36,11 @@ class ServiceList(Resource):
     @ns.expect(service_model)
     @ns.marshal_with(service_model, code=201)
     def post(self):
-        # Extract dependencies from the payload
-        data = request.json  # Change to accept JSON
-        print(request.json)
+        # get data from app route request
+        data = request.json 
+        # print(request.json)
 
-        dependent_service_names = data.get('dependent_services', [])
-        selected_tags = data.get('tags', [])
-        print("api json rec: ", dependent_service_names, selected_tags)
-
+        # create service without relational data (needs id)
         new_service = Service(
             name=data.get('name') ,
             status=data.get('status'),
@@ -67,7 +56,12 @@ class ServiceList(Resource):
         # Retrieve the new service ID
         new_service_id = new_service.id
 
-        # Retrieve IDs of dependent services from the database
+        # get relational data
+        dependent_service_names = data.get('dependent_services', [])
+        selected_tags = data.get('tags', [])
+        print("api json rec: ", dependent_service_names, selected_tags)
+
+        # retrieve IDs of dependent services from the database
         dependent_services = session.query(Service).filter(Service.id.in_(dependent_service_names)).all()
 
         # Add entries to the service_dependencies table
@@ -78,10 +72,10 @@ class ServiceList(Resource):
             dependent_service_id=dependent_service.id
         ))
 
-        # Retrieve IDs of dependent services from the database
+        # retrieve IDs of dependent tags from the database
         tags = session.query(Tag).filter(Tag.id.in_(selected_tags)).all()
 
-        # Add entries to the service_dependencies table
+        # add entries to the service_tags table
         for tag in tags:
             print(tag.id)
             session.execute(service_tags.insert().values(

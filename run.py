@@ -12,12 +12,11 @@ def run_app():
     # init db if not existing on app startup
     init_db()    
 
+    # cget/reate api blueprint
     api_blueprint = create_api()
 
-    # Register the API blueprint with the main app
+    # register api blueprint to app
     app.register_blueprint(api_blueprint, url_prefix='/api')
-
-
 
     return app
 

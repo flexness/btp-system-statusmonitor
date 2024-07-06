@@ -111,16 +111,24 @@ def add_service():
         }
         print(service_data)
         if service_data is not None:
-            try:                
-                response = requests.post('http://127.0.0.1:3000/api/services/', json=service_data)        
-                response.raise_for_status()
-                print("new service :", service_data)
+            try:
+                new_service = db_session.add(service_data)
+                db_session.commit()
+                # response = requests.post('http://127.0.0.1:3000/api/services/', json=new_service)        
+                # response.raise_for_status()
+                print("new service :", new_service)
                 flash('service added successfully!', 'success')
-            except requests.exceptions.RequestException as e:
+                check_service(new_service['id'])
+            except Exception as e:
+                db_session.rollback()
+            # except requests.exceptions.RequestException as e:
                 print(e)
                 flash('Failed to add service. Please try again.', 'error')
+            finally:
+                db_session.close()
         else:
             flash('Please enter a service name.', 'error')
+    
     return redirect(url_for('routes.admin'))
 
 
@@ -186,10 +194,6 @@ def search_services():
         db_session.close()
 
 
-@routes.route('/hello')
-def hello():
-    return jsonify('Hello World!')
-
 @routes.route("/dashboard")
 def dashboard():
 
@@ -199,6 +203,10 @@ def dashboard():
         # dash_css=dash_app._external_stylesheets,
         # dash_js=dash_app._external_scripts
     )
+
+
+
+
 
 
 @routes.route('/time')
@@ -215,6 +223,7 @@ def time():
     except Exception as e:
         return jsonify('Error: ' + str(e))
 
+
 @routes.route('/user')
 def user():
     jwt_token = request.headers.get('Authorization').split(' ')[1]
@@ -226,3 +235,12 @@ def user():
         'given_name': security_context.get_given_name(),
         'scopes': security_context.get_granted_scopes()
     })
+
+
+
+
+
+
+@routes.route('/hello')
+def hello():
+    return jsonify('Hello World!')

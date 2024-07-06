@@ -1,6 +1,6 @@
 from enum import Enum
 
-
+# enum to use in service-type select
 class ServiceType(Enum):
     APPLICATION_SERVER = 'application_server'
     DATABASE_SERVER = 'database_server'

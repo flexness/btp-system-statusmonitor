@@ -2,19 +2,20 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-
-# Replace with your actual database URL
+# adjust if needed
 DATABASE_URL = "sqlite:///main.db"
 
-# echo=True will print all SQL statements to the console
+### SQLAlchemy db setup
+
+# echo=True will print all/tons sql-statements to the console
 engine = create_engine(DATABASE_URL, echo=False)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
 Base = declarative_base()
 
+# imported in run.py to init DB setup on app startup (if not existing)
 def init_db():
-    """Create tables if they don't exist."""
     from api.models import Tag 
     from api.models import Service 
     Base.metadata.create_all(engine)
