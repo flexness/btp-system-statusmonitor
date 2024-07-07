@@ -10,10 +10,15 @@
         {% endblock %}
     </div>
     <div class="m-4 bg-body-tertiary" style="margin-top:42px;">
-        {% block main %}
-        {% endblock %}
+        <div id="loading-placeholder">
+            {% include 'loading.html' %}
+        </div>  
+        <div id="content-placeholder" class="d-none">
+            {% block main %}
+            {% endblock %}
+        </div>
     </div>
     
 </div>
+
 {% endblock %}
-    
