@@ -13,16 +13,20 @@ service_model = ns.model('Service', {
     'id': fields.Integer(readOnly=True, description='The service unique identifier'),
     'name': fields.String(required=True, description='The service name'),
     'status': fields.String(required=True, description='The service status'),
-    'description': fields.String(description='The service description'),
-    'endpoint': fields.String(description='The service endpoint'),
-    'version': fields.String(description='The service version'),
-    'contact': fields.String(description='The service contact'),
-    'tags': fields.List(fields.Nested(tag_model)),
-    'type': fields.String(description='The service type')
+    'description': fields.String(required=True, description='The service description'),
+    'endpoint': fields.String(required=True, description='The service endpoint'),
+    'version': fields.String(required=True, description='The service version'),
+    'contact': fields.String(required=True, description='The service contact'),
+    'tags': fields.List(fields.Nested(tag_model), description='The service tags'),
+    'type': fields.String(required=True, description='The service type')
     })
 
 # Register the model
 ns.models['Service'] = service_model
+
+# add dependent_services AFTER init of model
+# because dependent_services is a relationship to itself (a service depends on another service..)
+service_model['dependent_services'] = fields.List(fields.Nested(service_model), description='The services depending on this service')
 
 
 @ns.route('/')
@@ -30,6 +34,8 @@ class ServiceList(Resource):
     @ns.doc('list_services')
     @ns.marshal_list_with(service_model)
     def get(self):
+        print("api get")
+        print(session.query(Service).all())
         return session.query(Service).all()
 
     @ns.doc('create_service')
