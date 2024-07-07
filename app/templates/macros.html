@@ -114,6 +114,7 @@
     <tbody class="text-sm">
 
         {% for service in services %}
+        {{ service.depends_on_service }}
         <tr class="check">
             <td>{{ service.id }} </td>
             <td>{{ service.name }} </td>
@@ -123,8 +124,10 @@
                 <span id="status-{{ service.id }}" class="fs-6 badge 
                 {% if service.status == 'up' %}
                     badge text-bg-success
-                {% else %}
+                {% elif service.status == 'down' %}
                     badge text-bg-danger
+                {% else %}
+                    badge text-bg-warning
                 {% endif %}
                 ">
                     {{ service.status }}
@@ -151,10 +154,26 @@
                 <span><i class="bi bi-person"></i>P0000001</span><br>
               </td>
             <td>
-                <button type="button" class="btn btn-secondary btn-sm">Edit</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editServiceModal"
+                    data-service-id="{{ service.id }}"
+                    data-service-name="{{ service.name }}"
+                    data-service-endpoint="{{ service.endpoint }}"
+                    data-service-description="{{ service.description }}"
+                    data-service-version="{{ service.version }}"
+                    data-service-type="{{ service.type }}"
+                    data-service-dependencies='[
+                    {% for service in service.dependent_services %}
+                        {"id": {{ service.id }}, "name": "{{ service.name }}"}{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                    ]' 
+                    data-service-tags='[
+                    {% for tag in service.tags %}
+                        {"id": {{ tag.id }}, "name": "{{ tag.name }}"}{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                    ]' >
+                        Edit
+                </button>                
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteServiceModal" data-service-id="{{ service.id }}">Delete</button>
-        
-                <!-- <button type="button" id="delete-service" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteServiceModal">Delete</button> -->
 
             </td>
         </tr>
@@ -172,15 +191,15 @@
                     document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-danger');
                     document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-success');
                     document.getElementById(`status-${serviceId}`).innerText = "up";
-                } else if (data.status == 'up') {
+                } else if (data.status == 'down') {
                     document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-success');
                     document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-danger');
                     document.getElementById(`status-${serviceId}`).innerText = "down";
                 }
                 else {
                     document.getElementById(`status-${serviceId}`).classList.remove('badge', 'text-bg-success');
-                    document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-danger');
-                    document.getElementById(`status-${serviceId}`).innerText = "n/a";
+                    document.getElementById(`status-${serviceId}`).classList.add('badge', 'text-bg-warning');
+                    document.getElementById(`status-${serviceId}`).innerText = "n/q";
                 }
             })
             .catch(error => console.error('Error:', error));

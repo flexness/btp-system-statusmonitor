@@ -1,0 +1,64 @@
+<div class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="editServiceModalLabel">Edit Service</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body overflow-auto">
+              <form action="" method="post" id="editServiceForm">
+                  <input type="hidden" name="service_id" id="service_id">
+                  <div class="form-floating mb-3">
+                      <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name" required>
+                      <label for="service_name">Service Name</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                      <input type="text" class="form-control" name="service_endpoint" id="service_endpoint" placeholder="Service Endpoint" required>
+                      <label for="service_endpoint">Service Endpoint</label>
+                      <button type="button" class="btn btn-primary btn-sm" onclick="checkServiceAvailability()">Check Availability</button>
+                      <p id="statusDisplay"></p>
+                  </div>
+                  <div class="form-floating mb-3">
+                      <textarea style="height:100px;" class="form-control" name="service_desc" id="service_desc" placeholder="Service Description" required></textarea>
+                      <label for="service_desc">Service Description</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                      <input type="text" class="form-control" name="service_version" id="service_version" placeholder="Service Version" required>
+                      <label for="service_version">Service Version</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                      <select class="form-select form-select-lg mb-3" name="service_type" id="service_type" aria-label="Service Type">
+                          <option selected disabled>Select</option>
+                          {% for service_type in service_types %}
+                              <option value="{{ service_type.value }}">{{ service_type.value }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div class="form-floating mb-3">
+                      Select dependencies:
+                      {% for svc in services %}
+                          <div class="p-1 m-1 d-inline-block rounded bg-body-tertiary">
+                              <input class="form-check-input" name="services" type="checkbox" id="service{{ svc.id }}" value="{{ svc.id }}" aria-label="...">
+                              <label class="form-check-label" for="service{{ svc.id }}">{{ svc.name }}</label>
+                          </div>
+                      {% endfor %}
+                  </div>
+                  <div class="form-floating mb-3">
+                      Select tags:
+                      {% for tag in tags %}
+                          <div class="p-1 m-1 d-inline-block rounded bg-body-tertiary">
+                              <input class="form-check-input" name="tags" type="checkbox" id="checkbox{{ tag.id }}" value="{{ tag.id }}" aria-label="...">
+                              <label class="form-check-label" for="checkbox{{ tag.id }}">{{ tag.name }}</label>
+                          </div>
+                      {% endfor %}
+                  </div>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+              </form>
+          </div>
+          <div class="modal-footer">
+              Footer
+          </div>
+      </div>
+  </div>
+</div>
