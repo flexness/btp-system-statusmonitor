@@ -62,9 +62,13 @@ def check_service_availability():
             logger.info(f"service: {service}")
             try:
                 response = requests.get(service.endpoint, timeout=5)
-                service.status = 'up' if response.status_code == 200 else 'down'
+                match response.status_code:
+                    case 200:
+                        service.status = 'up'
+                    case _:
+                        service.status = 'down'
             except requests.RequestException:
-                service.status = 'down'
+                service.status = 'n/q'
         session.commit()  # Update the status in your database
     except Exception as e:
         session.rollback()

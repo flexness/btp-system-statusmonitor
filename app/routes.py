@@ -24,12 +24,9 @@ def index():
 
 @routes.route('/admin')
 def admin():
-    # services = request_session.get('http://127.0.0.1:3000/api/services/').json()
     services = db_session.query(Service).all()
-    # tags = request_session.get('http://127.0.0.1:3000/api/tags/').json()
     tags = db_session.query(Tag).all()
     service_types = ServiceType
-    print(service_types)
     return render_template('admin.html',
         services=services,
         tags=tags,
@@ -54,24 +51,35 @@ def check_service(service_id):
         if not service:
             print("Service not found")
             return jsonify({"error": "Service not found"}), 404
-        
         try:
             response = requests.get(service.endpoint, timeout=5)
-            print("status code: ", response.status_code)
-            service.status = 'up' if response.status_code == 200 else 'down'
-            db_session.commit()
-
-        except requests.RequestException:
-            service.status = 'down'
-            print("not queryable, RequestException")
+            print("response: ", response)
             print(response.status_code)
+            match response.status_code:
+                case 200:
+                    service.status = 'up'
+                case "n/q":
+                    service.status = 'n/q'
+                case _:
+                    service.status = 'down'
+            print("service.status: ", service.status)
+
+        except requests.RequestException as e:
+            service.status = 'n/q'
+            # return jsonify({"error": str(e)}), 500
         
+        print("service status: ", service.status)
+        db_session.commit()
+
         return jsonify({
             "id": service.id,
             "status": service.status
         })
+    
     except Exception as e:
+        db_session.rollback()  # Rollback in case of any other exception
         return jsonify({"error": str(e)}), 500
+    
     finally:
         db_session.close()
 
@@ -112,13 +120,27 @@ def add_service():
         print(service_data)
         if service_data is not None:
             try:
-                new_service = db_session.add(service_data)
+                
+                tags_instances = [db_session.query(Tag).get(tag_id) for tag_id in service_data['tags']]
+                dependent_services_instances = [db_session.query(Service).get(service_id) for service_id in service_data['dependent_services']]
+
+                new_service = Service(
+                    name=service_data['name'],
+                    description=service_data['description'],
+                    endpoint=service_data['endpoint'],
+                    version=service_data['version'],
+                    type=service_data['type'],
+                    tags=tags_instances,  
+                    dependent_services=dependent_services_instances
+                )
+                db_session.add(new_service)
                 db_session.commit()
-                # response = requests.post('http://127.0.0.1:3000/api/services/', json=new_service)        
+                new_service_id = new_service.id
+                # response = requests.post('http://127.0.0.1:3000/api/services/', json=service_data)        
                 # response.raise_for_status()
-                print("new service :", new_service)
+                print("new service :", new_service_id)
                 flash('service added successfully!', 'success')
-                check_service(new_service['id'])
+                check_service(new_service_id)
             except Exception as e:
                 db_session.rollback()
             # except requests.exceptions.RequestException as e:
