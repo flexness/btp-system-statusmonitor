@@ -32,6 +32,7 @@ class Service(Base):
     contact = Column(String)
     type = Column(String)
 
+    # Many-to-many relationship
     tags = relationship('Tag', secondary=service_tags, backref='services')
 
     # Relationships
@@ -64,6 +65,10 @@ class Service(Base):
 
         return False
     
+    # string representation of the class objects
+    def __repr__(self):
+        return f"<Service(id='{self.id}')>"
+    
 # Tag model
 class Tag(Base):
     __tablename__ = 'tags'
@@ -71,5 +76,6 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
 
+    # string representation of the class objects
     def __repr__(self):
-        return f"<Tag(name='{self.name}')>"
+        return f"<Tag(name='{self.name}')><Tag(id='{self.id}')>"

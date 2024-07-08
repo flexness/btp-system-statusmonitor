@@ -25,3 +25,16 @@
       
     </div>
   </div>
+
+
+  
+<script>
+  // trigger delete modal
+  var deleteServiceModal = document.getElementById('deleteServiceModal');
+  deleteServiceModal.addEventListener('show.bs.modal', function (event) {
+      var button = event.relatedTarget; // Button that triggered the modal
+      var serviceId = button.getAttribute('data-service-id'); // Extract info from data-* attributes
+      var modal = this;
+      modal.querySelector('#service_id').value = serviceId; // Update the input with the service ID
+  });
+</script>

@@ -67,6 +67,7 @@ def check_service_availability():
                         service.status = 'up'
                     case _:
                         service.status = 'down'
+                        print(f"Error: {response.status_code}")
             except requests.RequestException:
                 service.status = 'n/q'
         session.commit()  # Update the status in your database

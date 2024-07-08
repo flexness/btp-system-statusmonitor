@@ -117,6 +117,17 @@
     });
     </script>
 
+    <script>
+        // script to reset modal on close
+        // primarily to use one template for add/edit service
+        $(document).ready(function() {
+        $('#serviceModal').on('hidden.bs.modal', function () {
+            console.log("modal/form reset")
+            $(this).find('form').trigger('reset');
+            $(this).find('#statusDisplay').html("");
+        });
+        });
+    </script>
 </body>
 
 </html>

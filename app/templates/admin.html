@@ -10,8 +10,8 @@
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
-    Add new service
-  </button>
+  Add new service
+</button>
 
 </div>
   {{ services_table_admin(services) }}
@@ -30,86 +30,14 @@
     
   </div>
 
-  {{ service_types | safe}}
   {{ tags_list(tags) }}
+
 </div>
 
 {% include "modals/modal_service.html" %}
-
-{% include "modals/modal_add_service.html" %}
 {% include "modals/modal_delete_service.html" %}
 {% include "modals/modal_add_tag.html" %}
 
-<script>
-  // trigger delete modal
-  var deleteServiceModal = document.getElementById('deleteServiceModal');
-  deleteServiceModal.addEventListener('show.bs.modal', function (event) {
-      var button = event.relatedTarget; // Button that triggered the modal
-      var serviceId = button.getAttribute('data-service-id'); // Extract info from data-* attributes
-      var modal = this;
-      modal.querySelector('#service_id').value = serviceId; // Update the input with the service ID
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var editServiceModal = document.getElementById('editServiceModal');
-    editServiceModal.addEventListener('show.bs.modal', function(event) {
-      var button = event.relatedTarget; // Button that triggered the modal
-      var serviceId = button.getAttribute('data-service-id');
-      var serviceName = button.getAttribute('data-service-name');
-      var serviceEndpoint = button.getAttribute('data-service-endpoint');
-      var serviceDescription = button.getAttribute('data-service-description');
-      var serviceVersion = button.getAttribute('data-service-version');
-      var serviceType = button.getAttribute('data-service-type');
-      // json parse coz json received to send list of services/tags
-      var serviceDependencies = JSON.parse(button.getAttribute('data-service-dependencies'));
-      var serviceTags = JSON.parse(button.getAttribute('data-service-tags'));
 
-      console.log(serviceDependencies)
-      console.log(serviceTags)
-      serviceDependencies.forEach(function(dependency) {
-        console.log(dependency.name)
-      })
-
-      // Populate the modal fields with the data
-      var modal = editServiceModal;
-      modal.querySelector('#service_id').value = serviceId;
-      modal.querySelector('#service_name').value = serviceName;
-      modal.querySelector('#service_endpoint').value = serviceEndpoint;
-      modal.querySelector('#service_desc').value = serviceDescription;
-      modal.querySelector('#service_version').value = serviceVersion;
-      modal.querySelector('#service_type').value = serviceType;
-
-      // Uncheck all checkboxes first
-      var dependenciesCheckboxes = modal.querySelectorAll('input[name="services"]');
-      dependenciesCheckboxes.forEach(function(checkbox) {
-        checkbox.checked = false;
-      });
-      
-      var tagsCheckboxes = modal.querySelectorAll('input[name="tags"]');
-      tagsCheckboxes.forEach(function(checkbox) {
-        checkbox.checked = false;
-      });
-
-      // Check the appropriate checkboxes for dependencies
-      dependenciesCheckboxes.forEach(function(checkbox) {
-        serviceDependencies.forEach(function(dependency) {
-          if (dependency.id == checkbox.value) {
-              checkbox.checked = true;
-          }
-        });
-      });
-
-      // Check the appropriate checkboxes for tags
-      tagsCheckboxes.forEach(function(checkbox) {
-        serviceTags.forEach(function(tag) {
-          if (tag.id == checkbox.value) {
-              checkbox.checked = true;
-          }
-        });
-      });
-    });
-  });
-</script>
 {% endblock %} 
 

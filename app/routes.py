@@ -43,13 +43,17 @@ def table():
         sap_services=sap_services)
 
 
+
 @routes.route('/check_service/<service_id>', methods=['GET'])
 def check_service(service_id):
-    db_session = Session()
     try:
-        service = db_session.query(Service).get(service_id)
+        if service_id:
+            db_session = Session()
+            service = db_session.query(Service).get(service_id)
+        else:
+            service = request.form.get('service_endpoint')
         if not service:
-            print("Service not found")
+            print("Service or endpoint not found")
             return jsonify({"error": "Service not found"}), 404
         try:
             response = requests.get(service.endpoint, timeout=5)
@@ -57,6 +61,9 @@ def check_service(service_id):
             match response.status_code:
                 case 200:
                     service.status = 'up'
+                case 404:
+                    service.status = 'down'
+                    print("404")
                 case "n/q":
                     service.status = 'n/q'
                 case _:
@@ -81,6 +88,29 @@ def check_service(service_id):
     finally:
         db_session.close()
 
+
+@routes.route("/check_endpoint", methods=["POST"])
+def check_endpoint():
+    if request.method == 'POST':
+        data = request.get_json()
+        service_endpoint = data.get("service_endpoint")
+        if service_endpoint is not None:
+            try:
+                response = requests.get(service_endpoint, timeout=5)
+                print("response: ", response)
+                match response.status_code:
+                    case 200:
+                        return jsonify({"status": "up"})
+                    case 404:
+                        return jsonify({"status": "down"})
+                    case "n/q":
+                        return jsonify({"status": "n/q"})
+                    case _:
+                        return jsonify({"status": "down"})
+            except requests.RequestException as e:
+                return jsonify({"status": "n/q"})
+        else:
+            return jsonify({"error": "Service not found"})
 
 
 @routes.route("/addtag", methods=["POST"])
@@ -230,6 +260,7 @@ def edit_service():
     return redirect(url_for('routes.admin'))
 
 
+
 @routes.route('/service/<int:id>')
 def get_service(id):
     response = request_session.get(f'http://127.0.0.1:3000/api/services/{id}')
@@ -240,7 +271,9 @@ def get_service(id):
         service=service)
 
 
-# Example route for search
+
+
+# mining route for search
 @routes.route('/search', methods=['GET'])
 def search_services():
     query_string = request.args.get('q', '').strip()
@@ -268,6 +301,8 @@ def search_services():
 
     finally:
         db_session.close()
+
+
 
 
 @routes.route("/dashboard")

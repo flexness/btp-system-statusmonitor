@@ -1,7 +1,9 @@
 # flask app for statusmonitor *wip*
 - flask for backend/api
 - bootstrap + bootstrap-tables + boostrap-icons
-- swagger/flask_restx for api doc/test
+- celery & redis for updating status in bg
+- swagger/flask_restx for swagger-api doc/test
+- sqlite for non-prod env
 - optional: htmx, brwoser-sync, db-alternative
 - later: 
     - JWT, Login/User management
