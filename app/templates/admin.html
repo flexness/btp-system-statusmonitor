@@ -1,37 +1,7 @@
 {% extends "layout.html" %}
 {% block main %}
 {% from "macros.html" import services_table_admin, tags_list %}
-<script>
-  async function checkServiceAvailability() {
-      const endpoint = document.getElementById('service_endpoint').value;
-      const statusDisplay = document.getElementById('statusDisplay');
 
-      if (!endpoint) {
-        console.log('no endpoint')
-        statusDisplay.textContent = 'Please enter a service endpoint';
-        statusDisplay.style.color = 'red';
-        return;
-      } else {
-          try {
-              const response = await fetch(endpoint);
-              console.log(response)
-              if (response.ok) {
-                  statusDisplay.textContent = 'Service is available';
-                  statusDisplay.style.color = 'green';
-              } else if (response) {
-                
-              }
-              else {
-                  statusDisplay.textContent = `Service returned status: ${response.status}`;
-                  statusDisplay.style.color = 'orange';
-              }
-          } catch (error) {
-              statusDisplay.textContent = 'Service is unavailable';
-              statusDisplay.style.color = 'red';
-          }
-        }
-      }
-</script>
 <div  class="p-4">
   <div class="d-flex gap-4 align-items-center">
 

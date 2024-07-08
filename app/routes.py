@@ -54,7 +54,6 @@ def check_service(service_id):
         try:
             response = requests.get(service.endpoint, timeout=5)
             print("response: ", response)
-            print(response.status_code)
             match response.status_code:
                 case 200:
                     service.status = 'up'
@@ -62,7 +61,6 @@ def check_service(service_id):
                     service.status = 'n/q'
                 case _:
                     service.status = 'down'
-            print("service.status: ", service.status)
 
         except requests.RequestException as e:
             service.status = 'n/q'
@@ -140,6 +138,7 @@ def add_service():
                 # response.raise_for_status()
                 print("new service :", new_service_id)
                 flash('service added successfully!', 'success')
+                # check service ping (+ write to db)
                 check_service(new_service_id)
             except Exception as e:
                 db_session.rollback()
@@ -174,6 +173,61 @@ def delete_service():
         return jsonify({"error": str(e)}), 500
     finally:
         db_session.close()
+
+
+@routes.route('/edit_service', methods=["POST"])
+def edit_service():
+    if request.method == 'POST':
+
+        service_id = request.form.get('service_id')
+        if not service_id:
+            return jsonify({"error": "No service ID provided"}), 400
+
+        try:
+            service = db_session.query(Service).get(service_id)
+            if not service:
+                return jsonify({"error": "Service not found"}), 404
+            
+            # get the form data
+            name = request.form.get('service_name')
+            description = request.form.get('service_desc')
+            endpoint = request.form.get('service_endpoint')
+            version = request.form.get('service_name')
+            contact = request.form.get('service_contact')
+            dependent_services = request.form.getlist('services')
+            tags = request.form.getlist('tags')
+            type = request.form.get('service_type')
+            print("dependent services: ", dependent_services)
+
+            tags_instances = [db_session.query(Tag).get(tag_id) for tag_id in tags]
+            dependent_services_instances = [db_session.query(Service).get(service_id) for service_id in dependent_services]
+
+            # update the service
+            service.name = name
+            service.description = description
+            service.endpoint = endpoint
+            service.version = version
+            service.contact = contact
+            service.dependent_services = dependent_services_instances
+            service.tags = tags_instances
+            service.type = type
+
+            print("service after update: ", service)
+
+            db_session.commit()
+            flash('Service edited successfully!', 'success')
+            # return jsonify({"success": True}), 200
+            
+            return redirect(url_for('routes.admin'))
+        
+        except Exception as e:
+            db_session.rollback()
+            return jsonify({"error": str(e)}), 500
+        
+        finally:
+            db_session.close()
+
+    return redirect(url_for('routes.admin'))
 
 
 @routes.route('/service/<int:id>')

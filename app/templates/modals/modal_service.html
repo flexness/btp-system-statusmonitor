@@ -6,7 +6,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body overflow-auto">
-              <form action="" method="post" id="editServiceForm">
+              <form action="{{ url_for('routes.edit_service') }}" method="post" id="editServiceForm">
                   <input type="hidden" name="service_id" id="service_id">
                   <div class="form-floating mb-3">
                       <input type="text" class="form-control" name="service_name" id="service_name" placeholder="Service Name" required>
@@ -15,7 +15,7 @@
                   <div class="form-floating mb-3">
                       <input type="text" class="form-control" name="service_endpoint" id="service_endpoint" placeholder="Service Endpoint" required>
                       <label for="service_endpoint">Service Endpoint</label>
-                      <button type="button" class="btn btn-primary btn-sm" onclick="checkServiceAvailability()">Check Availability</button>
+                      <button type="button" id="check_service" class="btn btn-primary btn-sm" onclick="checkServiceAvailability()">Check Availability</button>
                       <p id="statusDisplay"></p>
                   </div>
                   <div class="form-floating mb-3">
@@ -62,3 +62,88 @@
       </div>
   </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var editServiceModal = document.getElementById('editServiceModal');
+      editServiceModal.addEventListener('show.bs.modal', function(event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        // receive all values passed with/from the button via data attributes
+        var serviceId = button.getAttribute('data-service-id');
+        var serviceName = button.getAttribute('data-service-name');
+        var serviceEndpoint = button.getAttribute('data-service-endpoint');
+        var serviceDescription = button.getAttribute('data-service-description');
+        var serviceVersion = button.getAttribute('data-service-version');
+        var serviceType = button.getAttribute('data-service-type');
+        // json parse coz json received to send list of services/tags
+        var serviceDependencies = JSON.parse(button.getAttribute('data-service-dependencies'));
+        var serviceTags = JSON.parse(button.getAttribute('data-service-tags'));
+  
+        console.log(serviceDependencies)
+        console.log(serviceTags)
+        serviceDependencies.forEach(function(dependency) {
+          console.log(dependency.name)
+        })
+  
+        // Populate the modal fields with the data
+        var modal = editServiceModal;
+        modal.querySelector('#service_id').value = serviceId;
+        modal.querySelector('#service_name').value = serviceName;
+        modal.querySelector('#service_endpoint').value = serviceEndpoint;
+        modal.querySelector('#service_desc').value = serviceDescription;
+        modal.querySelector('#service_version').value = serviceVersion;
+        modal.querySelector('#service_type').value = serviceType;
+        modal.querySelector('#check_service').value = serviceId;
+        
+        document.getElementById('statusDisplay').innerHTML = '';
+
+        // Uncheck all checkboxes first
+        var dependenciesCheckboxes = modal.querySelectorAll('input[name="services"]');
+        dependenciesCheckboxes.forEach(function(checkbox) {
+          checkbox.checked = false;
+        });
+        
+        var tagsCheckboxes = modal.querySelectorAll('input[name="tags"]');
+        tagsCheckboxes.forEach(function(checkbox) {
+          checkbox.checked = false;
+        });
+  
+        // Check the appropriate checkboxes for dependencies
+        dependenciesCheckboxes.forEach(function(checkbox) {
+          serviceDependencies.forEach(function(dependency) {
+            if (dependency.id == checkbox.value) {
+                checkbox.checked = true;
+            }
+          });
+        });
+  
+        // Check the appropriate checkboxes for tags
+        tagsCheckboxes.forEach(function(checkbox) {
+          serviceTags.forEach(function(tag) {
+            if (tag.id == checkbox.value) {
+                checkbox.checked = true;
+            }
+          });
+        });
+      });
+    });
+  </script>
+<script>
+    function checkServiceAvailability() {
+        var button = document.getElementById('check_service');
+        var serviceId = button.value;
+        $.ajax({
+            url: "/check_service/" + serviceId,
+            method: "GET",
+            success: function(response) {
+                if (response.status == "up") {
+                    $("#statusDisplay").html('<span class="badge text-bg-success">' + response.status + '</span>');
+                } else if (response.status == "down") {
+                    $("#statusDisplay").html('<span class="badge text-bg-danger">' + response.status + '</span>');
+                } else {
+                    $("#statusDisplay").html('<span class="badge text-bg-warning">' + response.status + '</span>');
+                }
+            }
+        });
+    }
+    </script>
