@@ -36,6 +36,7 @@
                   </div>
                   <div class="form-floating mb-3">
                       Select dependencies:
+
                       {% for svc in services %}
                           <div class="p-1 m-1 d-inline-block rounded bg-body-tertiary">
                               <input class="form-check-input" name="services" type="checkbox" id="service{{ svc.id }}" value="{{ svc.id }}" aria-label="...">
@@ -69,6 +70,8 @@
       serviceModal.addEventListener('show.bs.modal', function(event) {
         var button = event.relatedTarget; // Button that triggered the modal#
 
+        // check if button has no data-service-id
+        // values for adding a service
         if (button.getAttribute('data-service-id') == null) {
             console.log("null")
             document.getElementById("submitButton").innerHTML = "Add service";
@@ -77,6 +80,7 @@
           return;
         }
 
+        // values for editing a service
         document.getElementById("submitButton").innerHTML = "Save changes";
         document.getElementById("serviceModalLabel").innerHTML = "Edit service";
         document.getElementById("editServiceForm").action = "{{ url_for('routes.edit_service') }}";
@@ -91,11 +95,11 @@
         // json parse coz json received to send list of services/tags
         var serviceDependencies = JSON.parse(button.getAttribute('data-service-dependencies'));
         var serviceTags = JSON.parse(button.getAttribute('data-service-tags'));
-  
+        
         console.log(serviceDependencies)
         console.log(serviceTags)
         serviceDependencies.forEach(function(dependency) {
-          console.log(dependency.name)
+          console.log("dependencies: " + dependency.name)
         })
   
         // Populate the modal fields with the data
@@ -110,10 +114,24 @@
         
         document.getElementById('statusDisplay').innerHTML = '';
 
+        
+        const element = document.getElementById("service" + serviceId);
+            if (element) {
+                element.disabled = true;
+            } else {
+            }
+        
+
         // Uncheck all checkboxes first
+        // and disable input for current service (no self-dependency)
         var dependenciesCheckboxes = modal.querySelectorAll('input[name="services"]');
         dependenciesCheckboxes.forEach(function(checkbox) {
-          checkbox.checked = false;
+            if (checkbox.value == serviceId) {
+                checkbox.disabled = true;
+            } else {
+                checkbox.disabled = false;
+            }
+            checkbox.checked = false;
         });
         
         var tagsCheckboxes = modal.querySelectorAll('input[name="tags"]');

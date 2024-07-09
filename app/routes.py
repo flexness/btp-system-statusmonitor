@@ -229,6 +229,9 @@ def edit_service():
             type = request.form.get('service_type')
             print("dependent services: ", dependent_services)
 
+            if str(service_id) in dependent_services:
+                dependent_services.remove(str(service_id))
+
             tags_instances = [db_session.query(Tag).get(tag_id) for tag_id in tags]
             dependent_services_instances = [db_session.query(Service).get(service_id) for service_id in dependent_services]
 
