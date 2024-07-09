@@ -1,10 +1,13 @@
 # api/routes/services.py
 from flask_restx import Namespace, Resource, fields, marshal_with
-from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import scoped_session, joinedload
+
 from ..models import Service, Tag, service_dependencies, service_tags
 from database import Session
 from flask import request
 from .tags import tag_model
+import logging
+
 
 ns = Namespace('services', description='Service operations')
 session = scoped_session(Session)
@@ -17,7 +20,7 @@ service_model = ns.model('Service', {
     'endpoint': fields.String(required=True, description='The service endpoint'),
     'version': fields.String(required=True, description='The service version'),
     'contact': fields.String(required=True, description='The service contact'),
-    'tags': fields.List(fields.Nested(tag_model), description='The service tags'),
+    'tags': fields.List(fields.Nested(tag_model), description='The service contact'),
     'type': fields.String(required=True, description='The service type')
     })
 
@@ -29,14 +32,56 @@ ns.models['Service'] = service_model
 service_model['dependent_services'] = fields.List(fields.Nested(service_model), description='The services depending on this service')
 
 
+# ---
+# SERIALIZE JSON RESPONSE FOR LISTING SERVICES
+# ---
+# adjust data response depending on the depth of relations 
+# since services can be bi-diractional dependencies (receiver depends on sender, sender depends on receiver)
+# which would create inifite loops regarding the 'dependent_services' field
+# max_depth can be changed (0 display the first level of dependencies)
+def serialize_service(service, depth=0, max_depth=0):
+    # ignore dependencies if above max_depth 
+    if depth > max_depth:
+        return {
+            'id': service.id,
+            'name': service.name,
+            'status': service.status,
+            'description': service.description,
+            'endpoint': service.endpoint,
+            'version': service.version,
+            'contact': service.contact,
+            'tags': [{'id': tag.id, 'name': tag.name} for tag in service.tags],
+            'type': service.type
+        }
+
+    # include dependencies by default
+    return {
+        'id': service.id,
+        'name': service.name,
+        'status': service.status,
+        'description': service.description,
+        'endpoint': service.endpoint,
+        'version': service.version,
+        'contact': service.contact,
+        'tags': [{'id': tag.id, 'name': tag.name} for tag in service.tags],
+        'type': service.type,
+        'dependent_services': [serialize_service(dep, depth + 1, max_depth) for dep in service.dependent_services]
+    }
+
 @ns.route('/')
 class ServiceList(Resource):
     @ns.doc('list_services')
     @ns.marshal_list_with(service_model)
     def get(self):
-        print("api get")
-        print(session.query(Service).all())
-        return session.query(Service).all()
+        try:
+            logging.debug("Attempting to fetch services from the database")
+            services = session.query(Service).options(joinedload(Service.dependent_services)).all()
+            result = [serialize_service(service) for service in services]
+            logging.debug(f"Fetched services: {result}")
+            return result
+        except Exception as e:
+            logging.error(f"Error fetching services: {e}", exc_info=True)
+            return {'error': 'An error occurred while fetching services'}, 500
 
     @ns.doc('create_service')
     @ns.expect(service_model)

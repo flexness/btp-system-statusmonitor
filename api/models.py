@@ -65,9 +65,7 @@ class Service(Base):
 
         return False
     
-    # string representation of the class objects
-    def __repr__(self):
-        return f"<Service(id='{self.id}')>"
+
     
 # Tag model
 class Tag(Base):
