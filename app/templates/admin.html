@@ -2,22 +2,7 @@
 {% block main %}
 {% from "macros.html" import services_table_admin, tags_list %}
 
-<div  class="p-4">
-  <div class="d-flex gap-4 align-items-center">
-
-
-  <h2>Table of services</h2>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
-  Add new service
-</button>
-
-</div>
-  {{ services_table_admin(services) }}
-</div>
-
-<div  class="shadow-sm p-4 mt-4 mb-4">
+<div  class="shadow-sm p-4 mt-2 mb-2">
 
   <div class="d-flex gap-4 align-items-center">
 
@@ -32,6 +17,21 @@
 
   {{ tags_list(tags) }}
 
+</div>
+
+<div  class="p-4">
+  <div class="d-flex gap-4 align-items-center">
+
+
+  <h2>Table of services</h2>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal">
+  Add new service
+</button>
+
+</div>
+  {{ services_table_admin(services) }}
 </div>
 
 {% include "modals/modal_service.html" %}
