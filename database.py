@@ -8,7 +8,7 @@ DATABASE_URL = "sqlite:///main.db"
 ### SQLAlchemy db setup
 
 # echo=True will print all/tons sql-statements to the console
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(DATABASE_URL, echo=False)
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 

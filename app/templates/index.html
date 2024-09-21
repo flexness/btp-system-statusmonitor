@@ -4,5 +4,21 @@
 <div>
 home content index.html
 </div>
+<h2>General</h2>
+<div class="d-flex align-content-between flex-wrap gap-4">
+
+
+    <div class="flex bg-danger p-4">Total number:</div>
+    <div class="flex bg-danger p-4">Uptime:</div>
+
+</div>
+<h2>Service types</h2>
+<div class="d-flex align-content-between flex-wrap gap-4">
+
+    {% for service_type in service_types %}
+    <div class="flex bg-danger p-4">{{service_type.name}}</div>
+    {% endfor %}
+
+</div>
 
 {% endblock %} 

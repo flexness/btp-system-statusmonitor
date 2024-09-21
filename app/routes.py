@@ -15,12 +15,35 @@ routes = Blueprint('routes', __name__)
 db_session = Session()
 request_session = requests.Session()
 
+# special route
+# for listing all auto mapped routes
+# e.g. routes created by flask_restx for internal API calls
+# so you can use:
+# endpoint_url = url_for('api.tags_tag_list')
+
+@routes.route('/internal-routes')
+def list_internal_routes():
+    import urllib
+    data = []
+    for rule in current_app.url_map.iter_rules():
+        methods = ','.join(rule.methods)
+        url = urllib.parse.unquote(f'{rule}')
+        line = f"{rule.endpoint}: {url} ({methods})"
+        data.append(line)
+    # return "<br>".join(sorted(output))
+    return render_template('default.html', data=data)
+
+
+
 @routes.route('/')
 @routes.route('/index')
 def index():
+    
+    service_types = ServiceType
+    service_types=service_types
     return render_template('index.html',
+        service_types=service_types
     )
-
 
 @routes.route('/admin')
 def admin():
@@ -35,6 +58,7 @@ def admin():
 
 @routes.route('/services')
 def table():
+
     response = request_session.get('http://127.0.0.1:3000/api/services/')
     response.raise_for_status()
     sap_services = response.json()
@@ -58,6 +82,8 @@ def check_service(service_id):
         try:
             response = requests.get(service.endpoint, timeout=5)
             print("response: ", response)
+            for item in response:
+                print(item)
             match response.status_code:
                 case 200:
                     service.status = 'up'
@@ -118,19 +144,18 @@ def add_tag():
     if request.method == 'POST':
         print("1")
         tag = request.form.get('tag_name')
+        url = url_for('api.tags_tag_list')
+        print(url)
         if tag is not None:
-            try:
-                response = requests.post('http://127.0.0.1:3000/api/tags/', json={'name': tag})            
-                response.raise_for_status()
-                print(tag)
-                flash('Tag added successfully!', 'success')
-            except requests.exceptions.RequestException as e:
-                print(e)
-                flash('Failed to add tag. Please try again.', 'error')
+            with current_app.test_client() as client:
+                endpoint_url = url_for('api.tags_tag_list')
+                response = client.post(endpoint_url, json={'name': tag})
+                print(response)
+                # return jsonify(response), response.status_code
+                return redirect(url_for('routes.admin'))
         else:
             flash('Please enter a tag name.', 'error')
     return redirect(url_for('routes.admin'))
-
 
 @routes.route("/addservice", methods=["POST"])
 def add_service():
@@ -263,17 +288,16 @@ def edit_service():
     return redirect(url_for('routes.admin'))
 
 
-
 @routes.route('/service/<int:id>')
 def get_service(id):
-    response = request_session.get(f'http://127.0.0.1:3000/api/services/{id}')
-    response.raise_for_status()
-    service = response.json()
+    with current_app.test_client() as client:
+        endpoint_url = url_for('api.services_service_resource', id=id)
+        response = client.get(endpoint_url)
+        service_data = response.get_json()
+        print(response.data)
 
-    return render_template('service.html',
-        service=service)
-
-
+        return render_template('service.html',
+            service=service_data)
 
 
 # mining route for search
@@ -304,22 +328,6 @@ def search_services():
 
     finally:
         db_session.close()
-
-
-
-
-@routes.route("/dashboard")
-def dashboard():
-
-    return render_template('dashboard.html', 
-        # sap_services=sap_services,
-        # Include Dash CSS and JS in the template
-        # dash_css=dash_app._external_stylesheets,
-        # dash_js=dash_app._external_scripts
-    )
-
-
-
 
 
 

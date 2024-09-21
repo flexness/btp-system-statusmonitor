@@ -1,8 +1,22 @@
 {% extends "layout.html" %}
 {% block main %}
 
+
 <div>
-{{service}}
+{% for key, value in service.items() %}
+    <p> 
+    {{ key }}:
+    {% if value is iterable and not value is string %}
+    <ul>
+        {% for item in value %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    {{ value }}
+        {% endif %}
+    </p>
+{% endfor %}
 </div>
 
 {% endblock %} 

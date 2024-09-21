@@ -42,6 +42,11 @@
 - @ bootstrap table data-url e.g. `data-url="http://127.0.0.1:3000/api/services/"` table rows get auto-rendered!
 
 
+## testing
+- `pip install pytest pytest-flask coverage`
+- 
+
+
 ## status update worker
 celery and redis for updating status of service with worker/task (celery) and msg-broker/queue (redis)
 - `celery -A status_update.celery beat --loglevel=info`

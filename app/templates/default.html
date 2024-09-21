@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block main %}
+
+<h1>
+default.html template
+</h1>
+<p>all routes generated automatically by flask/packages</p>
+<div>
+    {% for line in data %}
+    {{ line }}</br>
+    {% endfor %}
+</div>
+
+{% endblock %} 

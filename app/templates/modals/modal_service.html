@@ -36,22 +36,29 @@
                   </div>
                   <div class="form-floating mb-3">
                       Select dependencies:
-
-                      {% for svc in services %}
+                      {% if services %}
+                        {% for svc in services %}
                           <div class="p-1 m-1 d-inline-block rounded bg-body-tertiary">
                               <input class="form-check-input" name="services" type="checkbox" id="service{{ svc.id }}" value="{{ svc.id }}" aria-label="...">
                               <label class="form-check-label" for="service{{ svc.id }}">{{ svc.name }}</label>
                           </div>
-                      {% endfor %}
+                        {% endfor %}
+                      {% else %}
+                          <p>No services found</p>
+                      {% endif %}
                   </div>
                   <div class="form-floating mb-3">
                       Select tags:
+                      {% if tags %}
                       {% for tag in tags %}
                           <div class="p-1 m-1 d-inline-block rounded bg-body-tertiary">
                               <input class="form-check-input" name="tags" type="checkbox" id="checkbox{{ tag.id }}" value="{{ tag.id }}" aria-label="...">
                               <label class="form-check-label" for="checkbox{{ tag.id }}">{{ tag.name }}</label>
                           </div>
                       {% endfor %}
+                      {% else %}
+                          <p>No tags found</p>
+                      {% endif %}   
                   </div>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary" id="submitButton">Save changes</button>
