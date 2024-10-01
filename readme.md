@@ -1,4 +1,7 @@
 # flask app for statusmonitor *wip*
+
+![example view](example-view.png "example view")
+
 - flask for backend/api
 - bootstrap + bootstrap-tables + boostrap-icons
 - celery & redis for updating status in bg
